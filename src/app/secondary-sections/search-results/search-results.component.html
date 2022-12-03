@@ -1,0 +1,139 @@
+<app-main-toolbar>
+
+
+
+<div style="display: inline-flex;">
+
+    <app-main-search-bar></app-main-search-bar>
+
+
+
+
+    <mat-form-field appearance="outline" class="filter-form">
+        <mat-label>Filtrar</mat-label>
+        <mat-select [formControl]="filters" multiple>
+            <!-- <mat-select-trigger>
+                {{filters.value?.[0].label_value || ''}}
+                <span *ngIf="(filters.value?.length || 0) > 1">
+                    (+{{(filters.value?.length || 0) -1}} {{filters.value?.length === 2 ? 'otro': 'otros'}})
+                </span>
+            </mat-select-trigger> -->
+            <mat-option *ngFor="let category of categories" [value]="category" >
+                <span><b>{{category.label_name}}</b></span> | <span>{{category.label_value}}</span>
+            </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>filter_alt</mat-icon>
+    </mat-form-field>
+
+
+    
+    <mat-form-field appearance="outline" class="filter-form">
+        <mat-label>Filtrar por marcar</mat-label>
+        <mat-select [formControl]="filters" multiple>
+            <!-- <mat-select-trigger>
+                {{filters.value?.[0].label_value || ''}}
+                <span *ngIf="(filters.value?.length || 0) > 1">
+                    (+{{(filters.value?.length || 0) -1}} {{filters.value?.length === 2 ? 'otro': 'otros'}})
+                </span>
+            </mat-select-trigger> -->
+            <mat-option *ngFor="let category of categories" [value]="category" >
+                <span><b>{{category.label_name}}</b></span> | <span>{{category.label_value}}</span>
+            </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>filter_alt</mat-icon>
+    </mat-form-field>
+
+
+
+
+
+</div>
+
+
+<h3 style="margin-left: 10px;"><b>{{resultsLength}}</b> resultados para la busqueda para <b>{{query}}</b>: </h3>
+
+
+
+
+
+
+
+
+
+
+<mat-card style="height: 50%;">
+
+    <div *ngIf="resultsLength === 0; then noProducts else productsFound"></div>
+
+
+    <ng-template #noProducts>
+        <h2>No se encontraron productos</h2>
+    </ng-template>
+
+
+    <ng-template #productsFound>
+
+        
+
+
+    <mat-grid-list rowHeight="200px" cols="4">
+        <mat-grid-tile *ngFor="let product of products">
+            <div>
+    
+    
+                <div class="image">
+                    <img class="products-img" [attr.width]="'100px'" [attr.height]="'100px'"
+                        src="../assets/bombillo dicroico.jpeg" alt="">
+
+                </div>
+
+                <button mat-button >{{product.title}}</button>
+                <div *ngIf="checkCart(product); then isInCart else notInCart"></div>
+
+
+
+                <ng-template #isInCart>
+                    <button mat-mini-fab style="background-color: red" (click)="removeFromCart(product)">
+                        <mat-icon>delete</mat-icon>
+                        </button>
+                </ng-template>
+
+
+
+
+
+
+                <ng-template #notInCart>
+                    <button style="background-color: dodgerblue;" mat-mini-fab (click)="addToCart(product)">
+                        <mat-icon>add_shopping_cart</mat-icon>
+                    </button>
+                </ng-template> 
+             
+            </div>
+        </mat-grid-tile>
+
+    </mat-grid-list>
+
+    
+  
+
+
+
+    
+    <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [routeData]="routeData"></app-pagination>
+
+
+    </ng-template>
+
+
+
+
+    </mat-card>
+
+
+
+
+
+
+
+</app-main-toolbar>

@@ -1,0 +1,64 @@
+<app-main-toolbar>
+
+
+
+ 
+    <div *ngIf="cartProducts.length === 0; else productsCart">
+        <h4>No hay productos en el carrito</h4>
+    </div>
+
+
+
+
+    <ng-template #productsCart>
+      
+          
+        <mat-grid-list style="background-color: white; height: 100%;" cols="{{sections[0].cols}}" rowHeight="{{sections[0].rowHeight}}">
+            <h2>Productos en el carrito</h2>
+
+
+                        <mat-grid-tile *ngFor="let template of cartProducts">
+                <div>
+
+
+                    <div class="image">
+                        <img class="products-img" [attr.width]="template.img_w" [attr.height]="template.img_h"
+                            [src]="template.img_src" alt="">
+
+                    </div>
+
+                    <button mat-button>{{template.category_name}} | cantidad: {{template.quantity}}</button>
+
+                    <div class="action-buttons">
+                        <button mat-stroked-button (click)="updateQuantity(template)">
+                            cantidad<mat-icon>edit</mat-icon>
+                        </button>
+
+                        <button  mat-stroked-button (click)="removeProduct(template)">
+                            Eliminar<mat-icon>cancel</mat-icon>
+                        </button>
+    
+    
+
+                    </div>
+               
+                </div>
+
+
+            </mat-grid-tile>
+
+
+        </mat-grid-list>
+
+  
+
+    </ng-template>
+
+
+
+
+
+
+
+
+</app-main-toolbar>

@@ -1,0 +1,42 @@
+
+
+
+
+<div *ngFor="let section of sections">
+
+    
+    <mat-card style="margin-bottom: 20px;">
+    
+        
+        <h3 style="text-align: center; font-weight: 200; font-size: 30px;">{{section.section_name}}</h3>
+        
+        <mat-grid-list cols="{{section.cols}}" rowHeight="{{section.rowHeight}}">
+            <mat-grid-tile  *ngFor="let template of section.sections_template">
+                <div>
+                    <button [routerLink]="template.route" [queryParams]="{category: template.query, section: template.category_name}" mat-button>{{template.category_name}} <mat-icon>chevron_right</mat-icon></button>
+    
+                    <div class="image">
+                        <img class="products-img" [attr.width]="template.img_w" [attr.height]="template.img_h" [src]="template.img_src" alt="">
+    
+                    </div>
+                </div>
+           
+            </mat-grid-tile>
+        
+        </mat-grid-list>
+    
+        <button [routerLink]="section.route" [queryParams]="{section: section.query, page: 1}"  mat-button>{{section.all_button}}<mat-icon>chevron_right</mat-icon></button>
+    
+    </mat-card>
+    
+    
+
+
+
+
+
+
+
+</div>
+    
+

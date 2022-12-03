@@ -1,0 +1,26 @@
+
+
+
+
+<form (submit)="search(searchBox.value)">
+
+
+        <mat-form-field [formGroup]="productService.searchForm" appearance="outline" class="search-form" >
+            <mat-label>Buscar productos</mat-label>
+            <input [matAutocomplete]="autoProduct"  #searchBox matInput id="search-box" placeholder="Buscar" formControlName="product" />
+            <mat-autocomplete #autoProduct="matAutocomplete">
+                <mat-option *ngFor="let product of filteredProducts | async" [value]="product.title">
+                  <span>{{product.title}}</span> |
+                  <small>{{product.modelo}}</small>
+                </mat-option>
+              </mat-autocomplete>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+   
+
+
+        <button class="search-button" style="background-color: dodgerblue" type="submit" mat-fab >
+       <mat-icon class="search-icon">search</mat-icon>
+      </button>
+    </form>
