@@ -67,7 +67,7 @@ export class MainCartComponent implements OnInit {
   updateQuantity(product){
     console.log(product)
     let route_data = JSON.stringify(product)
-    let route = `/${product.route}/${product.category_name}?d=${route_data}`
+    let route = `/product-details/${product.title}?d=${route_data}`
     this.router.navigateByUrl(route)
 
   }

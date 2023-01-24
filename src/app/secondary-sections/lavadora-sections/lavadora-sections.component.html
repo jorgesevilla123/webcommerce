@@ -1,6 +1,9 @@
 
 
 
+<app-cart-overview>
+
+
 <div *ngFor="let section of sections">
 
 
@@ -101,51 +104,71 @@
 
 
         
-        <h3 style="text-align: center; font-weight: 200; font-size: 30px; margin-top: 20px;">{{page_name}}</h3>
+        <h3 style="text-align: center; font-weight: 200; font-size: 30px; margin-top: 20px;">{{pageName}}</h3>
 
 
 
 
         <div *ngIf="isFiltering && matchExist; else noMatch">
-            <mat-grid-list cols="{{section.cols}}" rowHeight="{{section.rowHeight}}">
-                <mat-grid-tile *ngFor="let template of sectionsToRender">
-                    <div>
+
+
+
+
+
+
+          
+
+         
+            <mat-grid-list rowHeight="350px" cols="3">
+   
+
+        
     
-    
+                <mat-grid-tile *ngFor="let product of sectionsToRender">
+        
+                    <!-- this is the product card -->
+                    <div style="width: 250px" class="products-ui" >
+                      
+            
                         <div class="image">
-                            <img class="products-img" [attr.width]="template.img_w" [attr.height]="template.img_h"
-                                [src]="template.img_src" alt="">
-    
+                            <img class="products-img" 
+                                [src]="product.imagePath" alt="">
+        
                         </div>
-    
-                        <button mat-button (click)="getDescription(template)">{{template.category_name}}</button>
-                        <div *ngIf="checkCart(template); then isInCart else notInCart"></div>
-
-
-
+        
+                        <div>
+                            
+                        <h4 class="product-title" (click)="getDescription(product)">{{product.title}}</h4>
+                        <h2 style="color: rgb(1, 157, 1);">{{product.precio | currency: 'USD'}}</h2>
+        
+                        
+                        <div *ngIf="checkCart(product); then isInCart else notInCart"></div>
+        
+        
+        
                         <ng-template #isInCart>
-                            <button mat-mini-fab style="background-color: red" (click)="removeFromCart(template)">
-                                <mat-icon>delete</mat-icon>
+                            <button class="cart-button" mat-stroked-button style="background-color: red" (click)="removeFromCart(product)">
+                                Eliminar del carrito <mat-icon>delete</mat-icon>
                                 </button>
                         </ng-template>
-
-
-
-
-
-
+        
+        
+        
+        
                         <ng-template #notInCart>
-                            <button style="background-color: dodgerblue;" mat-mini-fab (click)="addToCart(template)">
-                                <mat-icon>add_shopping_cart</mat-icon>
+                            <button class="cart-button"  style="background-color: dodgerblue;" mat-stroked-button (click)="addToCart(product)">
+                                Agregar a carrito <mat-icon>add_shopping_cart</mat-icon>
                             </button>
                         </ng-template>
+                        
+        
+                        </div>
+        
+                      
                      
                     </div>
-    
-    
                 </mat-grid-tile>
-    
-    
+        
             </mat-grid-list>
 
         </div>
@@ -156,14 +179,31 @@
 
         </ng-template>
 
+        
+
   
+<div *ngIf="!completed; else paginator">
+    <h2>load</h2>
+    
+</div>
 
-        <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [routeData]="routeData"></app-pagination>
+<ng-template #paginator>
+    
+    
+    <app-pagination [pager]="pager" [pageName]="pageName"  [currentPage]="currentPage" (setNoPaginator)="setNoPaginator"></app-pagination>
 
+
+
+</ng-template>
+
+
+  
     </mat-card>
 
 
 </div>
+
+</app-cart-overview>
 
 
 

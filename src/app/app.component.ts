@@ -24,11 +24,6 @@ export class AppComponent implements OnInit{
 
 
   ngOnInit(){
-   this.getProducts()
-
-   console.log(this.products)
-
-   
 
 
   }
@@ -36,15 +31,4 @@ export class AppComponent implements OnInit{
 
 
 
-  getProducts(){
-    this.productService.getProducts().subscribe(
-      products => {
-        let newProducts = Array(products)
-        this.products = newProducts
-
-        console.log(this.products)
-      
-      }
-    )
-  }
 }

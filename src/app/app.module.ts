@@ -11,12 +11,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './main-sections/home/home.component';
 import { MainSectionsModule } from './main-sections/main-sections.module';
 import { SecondarySectionsModule } from './secondary-sections/secondary-sections.module';
+import { MainToolbarComponent } from './main-sections/main-toolbar/main-toolbar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    MainToolbarComponent
 
   ],
   imports: [
@@ -29,6 +31,9 @@ import { SecondarySectionsModule } from './secondary-sections/secondary-sections
     ReactiveFormsModule,
     MainSectionsModule,
     SecondarySectionsModule
+  ],
+  exports: [
+    MainToolbarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

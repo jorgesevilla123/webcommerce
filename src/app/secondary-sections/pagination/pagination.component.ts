@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { PaginationService } from '../../services/pagination.service';
-import { Router } from '@angular/router';
-
+import { ProductsService } from '../../services/products.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -14,47 +14,67 @@ import { Router } from '@angular/router';
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnInit, OnChanges{
 
-  @Input() totalItems: any
+
+  @Input() isMobile: boolean
+  @Input() pageName: any
   @Input() currentPage: any
-  @Input() routeData: any
-  @Input() queryParamsData: any
+  @Input() query:any
+
+  @Output() pagination = new EventEmitter()
+  @Output() setNoPaginator = new EventEmitter()
+
+
+
+  @Input() pager: any
+  pages: any
+
+
 
 
 
   page: number
+
   
 
 
 
 
-  pager
 
   constructor(  
     public paginationService: PaginationService,
-    public router: Router
+    public router: Router,
+    public productService: ProductsService,
+    public routing: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
 
-    this.page = this.currentPage
-    this.paginate(this.totalItems,this.currentPage, 10)
+  
+  }
+
+
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.pager !== undefined){
+      this.pager = changes.pager.currentValue
+      this.pages = this.pager.pager.pages
+  
+
+    }
+    else {
+      return
+
+    }
+ 
   }
 
 
 
 
+ 
 
-
-
-  paginate(totalItems: number, currentPage: any, pageSize: number, maxPages: number = 5){
-    this.paginationService.paginate(totalItems, currentPage, pageSize, maxPages).subscribe(
-      val => {
-        this.pager= val
-      }
-    )
-  }
 
 
 
@@ -62,75 +82,146 @@ export class PaginationComponent implements OnInit {
 
 
   route(page){
-    this.page = page
-    console.log(this.routeData)
-    let query = this.router.parseUrl(this.routeData.queryParams)
-   query.queryParams.page = page
-   let url = this.router.serializeUrl(query)
-   this.router.navigateByUrl(`${url}`)
-   this.paginate(this.totalItems, page, 10)
 
-   
+    if(this.query !== undefined){
+      this.productService.getProductsCategory(this.pageName, page).subscribe(
+        {
+          next: (val) => {
+            this.pager = val
+            console.log(this.pager)
+            this.pagination.emit(val.pageOfItems)
+            this.setNoPaginator.emit()
+            this.router.navigate([`/search`], {queryParams: {q: this.query, page: page}})
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+       
+          }
+        
+        }
+      )
+
+    }
+
+    else {
+      this.productService.getProductsCategory(this.pageName, page).subscribe(
+        {
+          next: (val) => {
+            this.pager = val
+            console.log(this.pager)
+            this.pagination.emit(val.pageOfItems)
+            this.router.navigate([`/${this.pageName}`], {queryParams: { page: page}})
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+       
+          }
+        
+        }
+      )
+
+    }
+
+
   }
+
+
+
+
+
 
 
 
   forwardButton(){
-    
-    let query = this.router.parseUrl(this.routeData.queryParams)
-   let currentPageQuery = Number(query.queryParams.page)
-
-    if(this.pager.totalPages === currentPageQuery){
-      return 
-
-    }
-
-    else {
+    if(this.query !== undefined){
+      let current = Number(this.currentPage)
+      let next = current  + 1
+      this.productService.getProductsCategory(this.query, next).subscribe(
+        {
+          next: (val) => {
+            this.pagination.emit(val)
+            this.currentPage = next
+            this.pager = val
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+            this.router.navigate([`/search`], {queryParams: {q: this.query, page: next}})
+          }
         
-    
-   let newPage = currentPageQuery + 1
-   console.log(newPage)
-   query.queryParams.page = newPage
-   this.page = newPage
-   
-   let url = this.router.serializeUrl(query)
-   this.router.navigateByUrl(`${url}`)
-   this.paginate(this.totalItems, newPage, 10)
-
-
+        }
+      )
 
     }
-
-
+    else {
+      let current = Number(this.currentPage)
+      let next = current  + 1
+      this.productService.getProductsCategory(this.query, next).subscribe(
+        {
+          next: (val) => {
+            this.pagination.emit(val)
+            this.currentPage = next
+            this.pager = val
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+            this.router.navigate([`/${this.pageName}`], {queryParams: { page: next}})
+          }
+        
+        }
+      )
+      
+    }
+   
+    
+   
+    
+  
 
   }
 
-1
+
   backButton(){
-
+    if(this.query !== undefined){
+      let previousPage = this.currentPage - 1
     
-    let query = this.router.parseUrl(this.routeData.queryParams)
-   let currentPageQuery = Number(query.queryParams.page)
-
-
-    if(currentPageQuery === 1){
-      return
+      this.productService.getProductsCategory(this.query, previousPage).subscribe(
+        {
+          next: (val) => {
+            this.pagination.emit(val)
+            this.currentPage = previousPage
+            this.pager = val
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+            this.router.navigate([`/search`], {queryParams: {q: this.query, page: previousPage}})
+          }
+        
+        }
+      )
 
     }
-
     else {
+      let previousPage = this.currentPage - 1
+    
+      this.productService.getProductsCategory(this.query, previousPage).subscribe(
+        {
+          next: (val) => {
+            this.pagination.emit(val)
+            this.currentPage = previousPage
+            this.pager = val
+          },
+          error: (err) => {console.log(err)},
+          complete: () => {
+            this.router.navigate([`/${this.pageName}`], {queryParams: {page: previousPage}})
+          }
+        
+        }
+      )
       
-   let newPage = currentPageQuery - 1
-   console.log(newPage)
-   query.queryParams.page = newPage
-   this.page = newPage
-   
-   let url = this.router.serializeUrl(query)
-   this.router.navigateByUrl(`${url}`)
-   this.paginate(this.totalItems, newPage, 10)
-
     }
-
+   
+    
+   
 
 
   }

@@ -23,18 +23,17 @@
 
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormControl, FormGroup } from '@angular/forms'
 
 import { getCategories } from 'FOR-TEST/products-management'
-import { productsCategory } from 'FOR-TEST/database-collections-test';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { CartService } from '../../services/cart.service'
-import { MainToolbarComponent } from '../../main-sections/main-toolbar/main-toolbar.component'
 import { AlertService } from '../../shared/alert.service'
 import { ProductsService } from '../../services/products.service'
+import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 
 
 
@@ -58,15 +57,16 @@ import { ProductsService } from '../../services/products.service'
   styleUrls: ['./lightning-section.component.scss']
 })
 export class LightningSectionComponent implements OnInit {
+  @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
+  @Input() data: any
 
 
-  
+
 
   constructor(
     public route: ActivatedRoute,
     public router: Router,
     public cartService: CartService,
-    public toolbar: MainToolbarComponent,
     public alert: AlertService,
     public productService: ProductsService
 
@@ -74,11 +74,16 @@ export class LightningSectionComponent implements OnInit {
 
 
 
+  isMobile: boolean
+  pager: any
 
 
 
-matchExist: boolean
-isFiltering: boolean 
+
+
+
+  matchExist: boolean
+  isFiltering: boolean
 
   categoryValues: Array<any> = []
 
@@ -94,49 +99,23 @@ isFiltering: boolean
   filterValues: any = []
 
 
-  categories: any 
+  categories: any
 
-  totalItems:  any
+  totalItems: any
 
   currentPage
 
   routeData: any
 
-
   sortList = [
     'menor precio a mayor precio',
     'mayor precio a menor precio'
   ]
+  pageName: any
 
 
 
 
-  sections_template: Array<any> =  [
-    { category_name: 'Bombillo led 15w 110v e27', category_id: [3,6,9,10],  capacity: '12w',route: "/product-details", query: 'bombillos', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Bombillo led 12w multivoltaje e27', category_id: [2,8,9,10],  capacity: '12w',route: "/product-details", query: 'bombillos', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px',quantity: 20 },
-    { category_name: 'Bombillo dicroico',category_id: [1,8,11],   capacity: '15w',route: "/product-details", query: 'dicroicos', img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Tubos LED',category_id: [3,8,14],  capacity: '15w', route: "/product-details", query: 'Tubos LED', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Reflector led 80w', category_id: [4,6,16],  capacity: '12w',route: "/product-details", query: 'reflectores', img_src: '../assets/ip66.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara cuadrada 24w', category_id: [4,8,10],  capacity: '12w',route: "/product-details", query: 'lamparas LED', img_src: '../assets/lampara cuadrada.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lamparas empotrables',category_id: [4,8,13],   capacity: '15w',route: "/product-details", query: 'Lamparas empotrables', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px',quantity: 20 },
-    { category_name: 'Lampara tungsteno', category_id: [5,8,13],  capacity: '12w',route: "/product-details", query: 'Lamparas de tungsteno', img_src: '../assets/lampara tungsteno.jpeg', img_w: '100px', img_h: '100px',quantity: 20 },
-    { category_name: 'Lampara UFO', category_id: [4,8,13], capacity: '12w', route: "/product-details", query: 'Lamparas ufo', img_src: '../assets/lampara UFO.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Reflector led 80w', category_id: [4,6,16], capacity: '12w', route: "/product-details", query: 'reflectores', img_src: '../assets/ip66.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara cuadrada 24w',  category_id: [4,8,13], capacity: '15w',route: "/product-details", query: 'lamparas LED', img_src: '../assets/lampara cuadrada.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lamparas empotrables', category_id: [1,8,13],  capacity: '12w',route: "/product-details", query: 'Lamparas empotrables', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara tungsteno', category_id: [4,7,13],  capacity: '9w',route: "/product-details", query: 'Lamparas de tungsteno', img_src: '../assets/lampara tungsteno.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara UFO',category_id: [4,8,13],  capacity: '12w', route: "/product-details", query: 'Lamparas ufo', img_src: '../assets/lampara UFO.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lamparas empotrables',category_id: [4,8,13],   capacity: '12w',route: "/product-details", query: 'Lamparas empotrables', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara tungsteno', category_id: [5,8,13], capacity: '12w', route: "/product-details", query: 'Lamparas de tungsteno', img_src: '../assets/lampara tungsteno.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara UFO',category_id: [4,8,13],  capacity: '12w', route: "/product-details", query: 'Lamparas ufo', img_src: '../assets/lampara UFO.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lamparas empotrables', category_id: [4,8,13],  capacity: '12w',route: "/product-details", query: 'Lamparas empotrables', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara tungsteno', category_id: [5,8,13],  capacity: '9w',route: "/product-details", query: 'Lamparas de tungsteno', img_src: '../assets/lampara tungsteno.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara UFO',category_id: [4,8,13],  capacity: '15w', route: "/product-details", query: 'Lamparas ufo', img_src: '../assets/lampara UFO.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lamparas empotrables', category_id: [4,8,13],  capacity: '12w',route: "/product-details", query: 'Lamparas empotrables', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara tungsteno',category_id: [5,8,13],  capacity: '9w', route: "/product-details", query: 'Lamparas de tungsteno', img_src: '../assets/lampara tungsteno.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-    { category_name: 'Lampara UFO',  category_id: [4,8,13], capacity: '12w',route: "/product-details", query: 'Lamparas ufo', img_src: '../assets/lampara UFO.jpeg', img_w: '100px', img_h: '100px', quantity: 20 },
-
-  ]
 
 
   sectionsToRender: any
@@ -146,7 +125,39 @@ isFiltering: boolean
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
 
-  
+
+
+  sections_template: Array<any> = [
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+    { category_name: 'Embraco', category_id: [1], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Frigidaire', category_id: [3], capacity: '12w', route: "/product-details", query: 'bombillos', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px', quantity: 20 },
+    { category_name: 'Whirlpool', category_id: [2], capacity: '15w', route: "/product-details", query: 'dicroicos', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px', quantity: 20 },
+
+  ]
+
+
+
+
+
 
 
 
@@ -158,33 +169,26 @@ isFiltering: boolean
   ]
 
 
-  
+
 
   category: any
   page_name: any
   page: any
-
-
-
-
+  completed = false
 
 
 
 
   ngOnInit(): void {
-
-    console.log(this.router.url)
-   
-
-    this.totalItems = this.productService.productsTestData.length
+    this.pageName = 'iluminacion'
 
 
 
 
-    
- 
-     // add page this.currentPage
-    
+
+
+    // add page this.currentPage
+
     this.isFiltering = true
     this.matchExist = true
     getCategories('iluminacion').subscribe(
@@ -195,18 +199,33 @@ isFiltering: boolean
     )
 
 
-    this.sectionsToRender = this.sections_template
 
 
     this.route.queryParams.subscribe(
       val => {
-        this.routeData = {route: '/sections', queryParams: this.router.url}
-        this.category = val.category
-        this.page_name = val.section
         this.currentPage = val.page
+        this.getProducts('iluminacion', this.currentPage)
+        setTimeout( () => {
+          this.completed = true
+
+        }, 500)
 
       }
     )
+  }
+
+
+
+
+
+  getProducts(category, page) {
+    this.productService.getProductsCategory(category, page).subscribe(
+      pager => {
+        this.pager = pager
+        this.sectionsToRender = pager.pageOfItems
+      }
+    )
+
   }
 
 
@@ -217,8 +236,9 @@ isFiltering: boolean
 
 
 
+
+
   getDescription(data) {
-    console.log(data)
     let route_data = JSON.stringify(data)
     let route = `/${data.route}/${data.category_name}?d=${route_data}`
     this.router.navigateByUrl(route)
@@ -235,9 +255,9 @@ isFiltering: boolean
 
 
   filterCategory(value) {
-    
-      
-    if(value.length === 0){
+
+
+    if (value.length === 0) {
       const reg = new RegExp('', 'gi');
       let matchedSection = this.sections_template.filter(
         ({ category_name }) => category_name.match(reg)
@@ -245,70 +265,64 @@ isFiltering: boolean
       this.sectionsToRender = this.sections_template
     }
     else {
-      
+
 
       let string = value.join('|')
-      console.log(string)
       const reg = new RegExp(string, 'gi');
       let matchedSection = this.sections_template.filter(
         ({ category_name }) => category_name.match(reg)
       )
-      console.log(matchedSection)
-
       this.sectionsToRender = matchedSection
 
     }
 
-    console.log(value)
-
-   
-    
-  }
 
 
-
-  filterByPrice(value){
 
   }
 
 
 
+  filterByPrice(value) {
+
+  }
 
 
-  optionHandler(value: MatOptionSelectionChange){
-   
 
-    if(value.source.selected === false){
+
+
+  optionHandler(value: MatOptionSelectionChange) {
+
+
+    if (value.source.selected === false) {
       let index = this.categoryValues.indexOf(value.source.value.id)
       // prevents that the remove function is executed again when the onChangeSelection function triggers on filter deselection
-      if(index === -1){
+      if (index === -1) {
         return
       }
       else {
         //removes the product filter
-        this.remove({id: value.source.value.id ,name: value.source.value.label_value, mat_select:value})
+        this.remove({ id: value.source.value.id, name: value.source.value.label_value, mat_select: value })
       }
-    
+
     }
 
     else {
-      
-
-    console.log(value)
 
 
-    this.categoryChips.push({id: value.source.value.id ,name: value.source.value.label_value, mat_select: value})
-  
- 
+
+      this.categoryChips.push({ id: value.source.value.id, name: value.source.value.label_value, mat_select: value })
+
+
       let label_value = value.source.value.id
       this.categoryValues.push(label_value)
 
-  
-      
-     this.filter()
-     this.isFiltering = true
-     this.matchExist = true
-     console.log('passed here')
+
+
+      this.filter()
+      this.isFiltering = true
+      this.matchExist = true
+
 
     }
 
@@ -324,7 +338,7 @@ isFiltering: boolean
     //   this.sectionsToRender = this.sections_template
     // }
     // else {
-      
+
 
     //   let string = value.join('|')
     //   console.log(string)
@@ -345,35 +359,34 @@ isFiltering: boolean
 
 
 
-  remove(category){
+  remove(category) {
 
-    
+
     let index = this.categoryChips.indexOf(category)
 
-    this.categoryChips.splice(index,1)
- 
-   let categoryIndex = this.categoryValues.indexOf(category.id)
+    this.categoryChips.splice(index, 1)
 
-   this.categoryValues.splice(categoryIndex,1)
+    let categoryIndex = this.categoryValues.indexOf(category.id)
 
-
-   category.mat_select.source.deselect()
+    this.categoryValues.splice(categoryIndex, 1)
 
 
-   if(this.categoryValues.length > 0){
+    category.mat_select.source.deselect()
 
-    this.filter()
 
-    
-   }
-   else {
-    this.isFiltering = true
-    this.matchExist = true
-    this.sectionsToRender = this.sections_template
+    if (this.categoryValues.length > 0) {
 
-   }
+      this.filter()
 
-  
+    }
+    else {
+      this.isFiltering = true
+      this.matchExist = true
+      this.sectionsToRender = this.sections_template
+
+    }
+
+
 
 
 
@@ -384,12 +397,15 @@ isFiltering: boolean
 
 
 
-    
 
 
-  checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.category_name === product.category_name)
-    if(isInCart){
+
+
+
+
+  checkCart(product) {
+    let isInCart = this.cartService.cartProducts.some(productFound => productFound.title === product.title)
+    if (isInCart) {
       return true
     }
     else {
@@ -407,35 +423,30 @@ isFiltering: boolean
 
 
 
-  filter(){
+  filter() {
     let filterValues = new Set(this.categoryValues)
 
 
-    let matched = this.sections_template.filter( value => 
-     value.category_id.some( n => filterValues.has(n))
+    let matched = this.sections_template.filter(value =>
+      value.category_id.some(n => filterValues.has(n))
     )
 
-    if(matched.length === 0){
+    if (matched.length === 0) {
       this.isFiltering = true
       this.matchExist = false
-
-
-
     }
 
     else {
-      
+
       this.sectionsToRender = matched
       this.isFiltering = true
       this.matchExist = true
     }
- 
- 
   }
 
 
 
-  sortByPrice(){
+  sortByPrice() {
 
 
     //add prices to implement price filter
@@ -447,21 +458,23 @@ isFiltering: boolean
 
 
 
-  addToCart(product){
+  addToCart(product) {
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
-    this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
+    this.cartDrawer.open()
   }
 
 
 
-  removeFromCart(product){
+  removeFromCart(product) {
     this.cartService.deleteById(product)
     this.checkCart(product)
     this.cartService.updateCount()
     this.alert.notifySuccess('Producto eliminado del carrito', 800, 'top', 'center');
   }
+
+
 
 
 

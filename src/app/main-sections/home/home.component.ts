@@ -16,25 +16,11 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.service.getProducts().subscribe(
-      val => {
-        this.products = val
-      }
-    )
-
-
-    this.countProducts()
-
-    
-    
-
-  }
-
-
-  countProducts(){
-    console.log(this.products.length)
-  }
-
   
+    
+    
+
+  }
+
 
 }

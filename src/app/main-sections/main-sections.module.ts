@@ -6,8 +6,14 @@ import { MainToolbarComponent } from './main-toolbar/main-toolbar.component'
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
-import { MainSectionTemplatesComponent } from './main-section-templates/main-section-templates.component'
-
+import { MainSectionTemplatesComponent } from './main-section-templates/main-section-templates.component';
+import { BillingComponent } from './billing/billing.component';
+import { ProductsModalComponent } from './products-modal/products-modal.component';
+import { LoginComponent } from './login/login.component';
+import { RegistrationComponent } from './registration/registration.component'
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 
 
@@ -17,8 +23,12 @@ import { MainSectionTemplatesComponent } from './main-section-templates/main-sec
   declarations: [
     MainCartComponent,
     MainSearchBarComponent,
-    MainToolbarComponent,
-    MainSectionTemplatesComponent
+    MainSectionTemplatesComponent,
+    BillingComponent,
+    ProductsModalComponent,
+    LoginComponent,
+    RegistrationComponent,
+    UserDashboardComponent
 
 
   ],
@@ -27,10 +37,12 @@ import { MainSectionTemplatesComponent } from './main-section-templates/main-sec
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   exports: [
-    MainToolbarComponent,
+   
     MainSearchBarComponent,
     MainSectionTemplatesComponent
 

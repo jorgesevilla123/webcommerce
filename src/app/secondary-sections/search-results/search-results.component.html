@@ -1,4 +1,5 @@
-<app-main-toolbar>
+
+<app-cart-overview>
 
 
 
@@ -54,86 +55,79 @@
 
 
 
-
-
-
-
-
-
-
-<mat-card style="height: 50%;">
-
-    <div *ngIf="resultsLength === 0; then noProducts else productsFound"></div>
-
-
-    <ng-template #noProducts>
-        <h2>No se encontraron productos</h2>
-    </ng-template>
-
-
-    <ng-template #productsFound>
+           
+<mat-grid-list rowHeight="350px" cols="3">
+   
 
         
-
-
-    <mat-grid-list rowHeight="200px" cols="4">
-        <mat-grid-tile *ngFor="let product of products">
-            <div>
     
-    
-                <div class="image">
-                    <img class="products-img" [attr.width]="'100px'" [attr.height]="'100px'"
-                        src="../assets/bombillo dicroico.jpeg" alt="">
+    <mat-grid-tile *ngFor="let product of products">
 
-                </div>
+        <!-- this is the product card -->
+        <div style="width: 250px" class="products-ui" >
+          
 
-                <button mat-button >{{product.title}}</button>
-                <div *ngIf="checkCart(product); then isInCart else notInCart"></div>
+            <div class="image">
+                <img class="products-img" 
+                    [src]="product.imagePath" alt="">
 
-
-
-                <ng-template #isInCart>
-                    <button mat-mini-fab style="background-color: red" (click)="removeFromCart(product)">
-                        <mat-icon>delete</mat-icon>
-                        </button>
-                </ng-template>
-
-
-
-
-
-
-                <ng-template #notInCart>
-                    <button style="background-color: dodgerblue;" mat-mini-fab (click)="addToCart(product)">
-                        <mat-icon>add_shopping_cart</mat-icon>
-                    </button>
-                </ng-template> 
-             
             </div>
-        </mat-grid-tile>
 
-    </mat-grid-list>
+            <div>
+                
+            <h4 class="product-title">{{product.title}}</h4>
+            <h2 style="color: rgb(1, 157, 1);">{{product.precio | currency: 'USD'}}</h2>
+
+            
+            <div *ngIf="checkCart(product); then isInCart else notInCart"></div>
+
+
+
+            <ng-template #isInCart>
+                <button class="cart-button" mat-stroked-button style="background-color: red" (click)="removeFromCart(product)">
+                    Eliminar del carrito <mat-icon>delete</mat-icon>
+                    </button>
+            </ng-template>
+
+
+
+
+            <ng-template #notInCart>
+                <button class="cart-button"  style="background-color: dodgerblue;" mat-stroked-button (click)="addToCart(product)">
+                    Agregar a carrito <mat-icon>add_shopping_cart</mat-icon>
+                </button>
+            </ng-template>
+            
+
+            </div>
+
+          
+         
+        </div>
+    </mat-grid-tile>
+
+</mat-grid-list>
+
+
+
+
+
+<div *ngIf="!completed; else paginator">
+    <h2>load</h2>
+    
+</div>
+
+
+<ng-template #paginator>
+    <app-pagination [isMobile]="isMobile" [currentPage]="currentPage" [pager]="pager" [query]="query"></app-pagination>
+</ng-template>
+
+
+
+
 
     
-  
+
+</app-cart-overview>
 
 
-
-    
-    <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [routeData]="routeData"></app-pagination>
-
-
-    </ng-template>
-
-
-
-
-    </mat-card>
-
-
-
-
-
-
-
-</app-main-toolbar>

@@ -1,11 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart.service'
 import { AlertService } from 'src/app/shared/alert.service';
 import { FormControl } from '@angular/forms'
 import { getCategories } from 'FOR-TEST/products-management'
-import { map, mergeMap, of, tap } from 'rxjs';
+import { tap } from 'rxjs';
+import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
+import { PaginationService } from '../../services/pagination.service'
+import { PaginationComponent } from '../pagination/pagination.component'
+
+
+
 
 @Component({
   selector: 'app-search-results',
@@ -13,7 +19,8 @@ import { map, mergeMap, of, tap } from 'rxjs';
   styleUrls: ['./search-results.component.scss']
 })
 export class SearchResultsComponent implements OnInit {
-
+ @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
+ @ViewChild(PaginationComponent) paginate: PaginationComponent  
   products: any
   query: any
   resultsLength: any
@@ -23,10 +30,10 @@ export class SearchResultsComponent implements OnInit {
   categories: any 
   commonCategories 
   categoriesArr: any = []
-
-
-
   filters = new FormControl(null);
+  isMobile: boolean
+  pager: any
+  completed: boolean = false
 
 
 
@@ -39,16 +46,20 @@ export class SearchResultsComponent implements OnInit {
     private route: ActivatedRoute,
     public productsService: ProductsService,
     public cartService: CartService,
-    public alert: AlertService
+    public alert: AlertService,
+    public paginationService: PaginationService
   ) { }
 
+
+
+
+
+
+  
   ngOnInit(): void {
-
-
-
-
-
-
+  
+    
+    
 
 
 
@@ -67,29 +78,10 @@ export class SearchResultsComponent implements OnInit {
     this.route.queryParamMap.subscribe(
       ({params}: any) => {
         this.query = params.q
-        this.productsService.searchProducts(params.q).pipe(
-          tap(
-            val => {
-              this.resultsLength = val.length
-              this.products = val
-              
-            }
-          ),
-        ).subscribe(
-          val => {
-            val.forEach(element => {
-              console.log(element.categorias)
-            
-              this.categoriesArr.push(element.categorias[0])     
-              console.log(this.categoriesArr)         
-            });
-          
-
-          }
-      
-        )
+        this.searchProducts(this.query, params.page)
       }
     )
+  }
 
 
 
@@ -97,6 +89,34 @@ export class SearchResultsComponent implements OnInit {
 
 
 
+
+
+  searchProducts(query, page){
+    this.productsService.searchProducts(query, page).subscribe(
+      val => {
+        this.resultsLength = val.pageOfItems.length
+        this.products = val.pageOfItems
+        this.paginationService.setPager(val)
+        this.getPager()
+        setTimeout(() => {
+          this.completed = true
+        }, 200)
+      }
+    )
+  }
+
+
+
+
+
+
+
+  getPager(){
+    this.paginationService.getPager().subscribe(
+      pager => {
+        this.pager = pager
+      }
+    )
   }
 
 
@@ -122,11 +142,10 @@ export class SearchResultsComponent implements OnInit {
 
   
   addToCart(product){
-    console.log(product)
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
-    this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
+    this.cartDrawer.open()
   }
 
 

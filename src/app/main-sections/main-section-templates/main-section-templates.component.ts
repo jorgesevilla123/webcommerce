@@ -51,7 +51,7 @@ export class MainSectionTemplatesComponent implements OnInit {
       ]
      },
      {
-      section_name: 'Iluminacion', route:"/sections", query: 'iluminacion',  all_button: 'Ver toda la iluminacion', cols: 4, rowHeight: '220px', sections_template: [
+      section_name: 'Iluminacion', route:"/iluminacion", query: 'iluminacion',  all_button: 'Ver toda la iluminacion', cols: 4, rowHeight: '220px', sections_template: [
         { category_name: 'Bombillos LED', route: "sectionss", query: 'bombillos',  img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Bombillos dicroicos', route: "/sections", query: 'dicroicos',  img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Tubos LED', route: "/sections", query: 'Tubos LED',  img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},
@@ -64,7 +64,7 @@ export class MainSectionTemplatesComponent implements OnInit {
       ]
      },
      {
-      section_name: 'Herramientas', route:"/sections", query: 'herramientas',  all_button: 'Ver todas las herramientas', cols: 4, rowHeight: '220px', sections_template: [
+      section_name: 'Herramientas', route:"/herramientas", query: 'herramientas',  all_button: 'Ver todas las herramientas', cols: 4, rowHeight: '220px', sections_template: [
         { category_name: 'Alicates', route:  "/categories", query: 'alicates', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Pinzas',  route: "/categories",  query: 'pinzas',img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Destornilladores de estria', route: "/categories",  query: 'destornilladores-estria', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},
@@ -82,7 +82,7 @@ export class MainSectionTemplatesComponent implements OnInit {
      },
 
      {
-      section_name: 'Repuestos de lavadora por categorias', route:"/sections", query: 'lavadora',  all_button: 'Ver todas las categorias de repuestos para lavadora', cols: 4, rowHeight: '220px', sections_template: [
+      section_name: 'Repuestos de lavadora por categorias', route:"/lavadora", query: 'lavadora',  all_button: 'Ver todas las categorias de repuestos para lavadora', cols: 4, rowHeight: '220px', sections_template: [
         { category_name: 'Switches de lavadora',  route: "/categories", query: 'switch-lavadora', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Bombas de agua', route: "/categories", query: 'Bomba-agua-lavadora',  img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Transmisiones de lavadora',  route: "/categories",  query: 'transmision-lavadora',img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},
@@ -98,7 +98,7 @@ export class MainSectionTemplatesComponent implements OnInit {
       ]
      },
      {
-      section_name: 'Repuestos por marca', route:"/sections", query: 'marcas', all_button: 'Ver todas las marcas', cols: 6, rowHeight: '220px', sections_template: [
+      section_name: 'Repuestos por marca', route:"/marcas", query: 'marcas', all_button: 'Ver todas las marcas', cols: 6, rowHeight: '220px', sections_template: [
         { category_name: 'Danfoss', route: "/categories", query: 'danfoss', img_src: '../assets/embraco.png', img_w: '180px', img_h: '100px'},
         { category_name: 'Embraco', route: "/categories", query: 'embraco', img_src: '../assets/frigidaire.png', img_w: '180px', img_h: '100px'},
         { category_name: 'Whirlpool',  route:"/categories", query: 'whirlpool', img_src: '../assets/whirlpool.png', img_w: '180px', img_h: '100px'},
@@ -109,7 +109,7 @@ export class MainSectionTemplatesComponent implements OnInit {
       ]
      },
 {
-      section_name: 'Repuestos de secadora por categorias', route:"/sections", query: 'secadora',  all_button: 'Ver todas las categorias de repuestos para secadora', cols: 3, rowHeight: '220px', sections_template: [
+      section_name: 'Repuestos de secadora por categorias', route:"/secadora", query: 'secadora',  all_button: 'Ver todas las categorias de repuestos para secadora', cols: 3, rowHeight: '220px', sections_template: [
         { category_name: 'Switches de secadora', route: "/categories",  query: 'switch-secadora', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Correas de secadora',  route: "/categories",  query: 'correa-secadora',img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Ignitores', route: "/categories",  query: 'ignitor-secadora', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},
@@ -119,7 +119,7 @@ export class MainSectionTemplatesComponent implements OnInit {
       ]
      },
      {
-      section_name: 'Repuestos de refrigeracion automotriz', route:"/sections", query: 'Refrigeracion automotriz', all_button: 'Ver todas las categorias de repuestos automotriz', cols: 4, rowHeight: '220px', sections_template: [
+      section_name: 'Repuestos de refrigeracion automotriz', route:"/automotriz", query: 'automotriz', all_button: 'Ver todas las categorias de repuestos automotriz', cols: 4, rowHeight: '220px', sections_template: [
         { category_name: 'Evaporadores',  route:"/categories", query: 'evaporador-auto',  img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Condensadores',  route: "/categories",  query: 'condensador-auto',img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
         { category_name: 'Sellos autommotriz', route: "/categories",  query: 'sello-auto', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},

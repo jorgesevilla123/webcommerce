@@ -2,12 +2,14 @@
   "name": "web",
   "version": "0.0.0",
   "scripts": {
-    "start:server": "ts-node server.ts",
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node server.js",
+    "dev": "ng serve",
+    "build": "npm run config -- --environment=prod & ng build --prod",
+    "config": "node set-env.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "heroku-postbuild": "npm run config -- --environment=prod & ng build"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +29,7 @@
     "mongoose": "^6.6.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "yargs": "^17.6.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

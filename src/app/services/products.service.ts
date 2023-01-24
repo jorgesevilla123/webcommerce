@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { map, Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -13,7 +14,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 export class ProductsService {
 
-  API: any = 'http://localhost:4000/api/products';
+  API: any
   products: any
 
 
@@ -58,7 +59,9 @@ export class ProductsService {
 
   constructor(
     public http: HttpClient
-  ) { }
+  ) { 
+    this.API =  environment.PRODUCTS_API
+  }
 
 
 
@@ -89,10 +92,21 @@ export class ProductsService {
 
 
 
-  searchProducts(query){
-    let api = `${this.API}/search-products?q=${query}`
+  searchProducts(query, page){
+    let api = `${this.API}/search-products?q=${query}&page=${page}`
     return this.http.get<any>(api).pipe(
       map(productsMatch => {return productsMatch})
+    )
+
+  }
+
+
+
+
+  getProductsCategory(category, page){
+    let api =  `${this.API}/get-category/${category}/${page}`
+    return this.http.get<any>(api).pipe(
+      map(products => {return products})
     )
 
   }

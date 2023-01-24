@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { ProductsService } from '../../services/products.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -32,7 +32,20 @@ export class MainSearchBarComponent implements OnInit {
 
 
     this.filteredProducts = this.productService.searchForm.get('product')?.valueChanges.pipe(
-      map( val => (val ? this.filterProducts(val) : this.productService.products.slice()))
+      debounceTime(300),
+
+      map( val => {
+        if(val === ''){
+          console.log('Any search')
+          return
+        }
+        else {
+          return val ? this.filterProducts(val) : this.productService.products.slice()
+      
+
+        }
+       
+      })
     )
     
   }
@@ -60,10 +73,13 @@ export class MainSearchBarComponent implements OnInit {
   }
 
 
+  
+
+
   search(value){
     console.log(value)
 
-    this.router.navigate(['/search'], {queryParams: { q: value}})
+    this.router.navigate(['/search'], {queryParams: { q: value, page: 1}})
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms'
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { map } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
-
+import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 
 @Component({
   selector: 'app-herramientas-section',
@@ -15,9 +15,14 @@ import { AlertService } from 'src/app/shared/alert.service';
   styleUrls: ['./herramientas-section.component.scss']
 })
 export class HerramientasSectionComponent implements OnInit {
+  @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
 
 
+  @Input() data: any
+  @Input() changefromParent: boolean
 
+
+  products: any;
   filters = new FormControl(null);
   sort = new FormControl('');
   categoryValues: Array<any> = []
@@ -78,6 +83,10 @@ export class HerramientasSectionComponent implements OnInit {
   category: any
   currentPage: any
   totalItems: any
+  isMobile: boolean
+  pager: any 
+  pageName: any
+  completed: boolean = false
 
 
 
@@ -93,19 +102,21 @@ export class HerramientasSectionComponent implements OnInit {
     public productService: ProductsService
   ) { }
 
+
+
+
+
+
+
+
   ngOnInit(): void {
+    this.pageName = 'herramientas'
+
+
+
     this.isFiltering = true
     this.matchExist = true
-
-    console.log(this.router.url)
-    this.sectionsToRender = this.sections_template
-
-   
-
-    this.totalItems = this.sections_template.length
-
-
-
+ 
 
     getCategories('Herramientas').pipe(
       map(val => {return val})
@@ -118,17 +129,18 @@ export class HerramientasSectionComponent implements OnInit {
     
     this.route.queryParams.subscribe(
       val => {
-        console.log(val)
-        this.routeData = {route: '/sections', queryParams: this.router.url}
-        this.category = val.category
-        this.page_name = val.section
         this.currentPage = val.page
+        this.getProducts('herramientas', this.currentPage)
+        setTimeout( () => {
+          this.completed = true
+
+
+
+        }, 500)
+        
 
       }
     )
-
-
-
 
 
   }
@@ -136,9 +148,27 @@ export class HerramientasSectionComponent implements OnInit {
 
 
 
+  getProducts(category, page){
+    console.log(category)
+    this.productService.getProductsCategory(category, page).subscribe(
+      pager => {
+        this.pager = pager
+        this.sectionsToRender = pager.pageOfItems
+        console.log(pager)
+      }
+    )
+
+  }
+
+
+
+
+
+
+
+
+
   filterCategory(value) {
-
-
     if (value.length === 0) {
       const reg = new RegExp('', 'gi');
       let matchedSection = this.sections_template.filter(
@@ -147,8 +177,6 @@ export class HerramientasSectionComponent implements OnInit {
       this.sectionsToRender = this.sections_template
     }
     else {
-
-
       let string = value.join('|')
       console.log(string)
       const reg = new RegExp(string, 'gi');
@@ -158,14 +186,15 @@ export class HerramientasSectionComponent implements OnInit {
       console.log(matchedSection)
 
       this.sectionsToRender = matchedSection
-
     }
 
     console.log(value)
-
-
-
   }
+
+
+
+
+
 
 
 
@@ -178,10 +207,7 @@ export class HerramientasSectionComponent implements OnInit {
 
 
   optionHandler(value: MatOptionSelectionChange) {
-
     console.log(value.source)
-
-
     if (value.source.selected === false) {
       let index = this.categoryValues.indexOf(value.source.value.id)
       // prevents that the remove function is executed again when the onChangeSelection function triggers on filter deselection
@@ -196,21 +222,15 @@ export class HerramientasSectionComponent implements OnInit {
     }
 
     else {
-
-
       console.log(value)
-
-
       this.categoryChips.push({ id: value.source.value.id, name: value.source.value.label_value, mat_select: value })
-
-
       let label_value = value.source.value.id
       this.categoryValues.push(label_value)
-
       this.filter()
-
     }
   }
+
+
 
 
 
@@ -221,7 +241,6 @@ export class HerramientasSectionComponent implements OnInit {
   remove(category) {
     console.log(category.id)
     console.log(this.categoryChips)
-
     let index = this.categoryChips.indexOf(category)
     console.log(index)
     this.categoryChips.splice(index, 1)
@@ -243,13 +262,12 @@ export class HerramientasSectionComponent implements OnInit {
       this.sectionsToRender = this.sections_template
 
     }
-
-
-
-
-
-
   }
+
+
+
+
+
 
 
 
@@ -257,8 +275,6 @@ export class HerramientasSectionComponent implements OnInit {
 
   filter(){
     let filterValues = new Set(this.categoryValues)
-
-
     let matched = this.sections_template.filter( value => 
      value.category_id.some( n => filterValues.has(n))
     )
@@ -266,13 +282,9 @@ export class HerramientasSectionComponent implements OnInit {
     if(matched.length === 0){
       this.isFiltering = true
       this.matchExist = false
-
-
-
     }
 
     else {
-      
       this.sectionsToRender = matched
       this.isFiltering = true
       this.matchExist = true
@@ -293,7 +305,7 @@ export class HerramientasSectionComponent implements OnInit {
   getDescription(data) {
     console.log(data)
     let route_data = JSON.stringify(data)
-    let route = `/${data.route}/${data.category_name}?d=${route_data}`
+    let route = `/product-details/${data.title}?d=${route_data}`
     this.router.navigateByUrl(route)
 
   }
@@ -302,8 +314,13 @@ export class HerramientasSectionComponent implements OnInit {
 
   
 
+
+
+
+
+
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.category_name === product.category_name)
+    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }
@@ -314,13 +331,19 @@ export class HerramientasSectionComponent implements OnInit {
 
 
 
+
+
   
   addToCart(product){
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
+    this.cartDrawer.open()
     this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
   }
+
+
+
 
 
 
@@ -330,6 +353,18 @@ export class HerramientasSectionComponent implements OnInit {
     this.cartService.updateCount()
     this.alert.notifySuccess('Producto eliminado del carrito', 800, 'top', 'center');
   }
+
+
+
+
+
+  
+  updatePaginator(products){
+    this.sectionsToRender = products
+  }
+
+
+
 
 
 

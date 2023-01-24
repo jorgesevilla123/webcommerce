@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms'
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { getCategories } from 'FOR-TEST/products-management'
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
+import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 
 @Component({
   selector: 'app-secadora-sections',
@@ -13,9 +14,11 @@ import { AlertService } from 'src/app/shared/alert.service';
   styleUrls: ['./secadora-sections.component.scss']
 })
 export class SecadoraSectionsComponent implements OnInit {
+  @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
+  @Input() data: any
 
 
-
+  products: any
   filters = new FormControl(null);
   sort = new FormControl('');
   categoryValues: Array<any> = []
@@ -95,6 +98,10 @@ export class SecadoraSectionsComponent implements OnInit {
   category: any
   currentPage: any
   totalItems: any
+  isMobile: boolean
+  pager: any
+  pageName: any
+  completed: boolean = false
 
 
 
@@ -110,16 +117,18 @@ export class SecadoraSectionsComponent implements OnInit {
     public productService: ProductsService
   ) { }
 
+
+
+
+
+
   ngOnInit(): void {
+    this.pageName = 'secadora'
+
     this.isFiltering = true
     this.matchExist = true
 
-    console.log(this.router.url)
-    this.sectionsToRender = this.sections_template
 
-   
-
-    this.totalItems = this.sections_template.length
 
 
 
@@ -134,10 +143,13 @@ export class SecadoraSectionsComponent implements OnInit {
     this.route.queryParams.subscribe(
       val => {
         console.log(val)
-        this.routeData = {route: '/sections', queryParams: this.router.url}
-        this.category = val.category
-        this.page_name = val.section
         this.currentPage = val.page
+        this.getProducts('secadora', this.currentPage),
+        setTimeout(() => {
+          this.completed = true
+
+        }, 500)
+
 
       }
     )
@@ -147,6 +159,23 @@ export class SecadoraSectionsComponent implements OnInit {
 
 
   }
+
+
+
+  
+  getProducts(category, page){
+    console.log(category)
+    this.productService.getProductsCategory(category, page).subscribe(
+      pager => {
+        this.pager = pager
+        this.sectionsToRender = pager.pageOfItems
+        console.log(pager)
+      }
+    )
+
+  }
+
+
 
 
 
@@ -303,7 +332,7 @@ export class SecadoraSectionsComponent implements OnInit {
   getDescription(data) {
     console.log(data)
     let route_data = JSON.stringify(data)
-    let route = `/${data.route}/${data.category_name}?d=${route_data}`
+    let route = `/product-details/${data.title}?d=${route_data}`
     this.router.navigateByUrl(route)
 
   }
@@ -313,7 +342,7 @@ export class SecadoraSectionsComponent implements OnInit {
   
 
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.category_name === product.category_name)
+    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }
@@ -329,6 +358,7 @@ export class SecadoraSectionsComponent implements OnInit {
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
+    this.cartDrawer.open()
     this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
   }
 

@@ -10,11 +10,12 @@ export class CartService {
 
   cartProducts: any = []
   count
+  total = 0
 
   constructor() { }
 
 
-  getCartProducts(): Observable<any>{
+  getCartProducts(): Observable<any> {
     return from([this.cartProducts])
   }
 
@@ -22,43 +23,100 @@ export class CartService {
 
 
 
-  addProductsToCart(product){
+  addProductsToCart(product) {
     this.cartProducts.push(product)
-    console.log('Pushed succesfully')
-    console.log(this.cartProducts)
 
   }
 
 
 
-  deleteProductFromCart(product){
+  deleteProductFromCart(product) {
     let index = this.cartProducts.indexOf(product)
-    console.log(index)
-    this.cartProducts.splice(index,1)
+
+    this.cartProducts.splice(index, 1)
 
   }
 
 
-  deleteById(product){
-    let index = this.cartProducts.findIndex( val => val.category_name === product.category_name)
-    console.log(index)
-    this.cartProducts.splice(index,1)
-    return from([{inCart: false}])
+  deleteById(product) {
+    let index = this.cartProducts.findIndex(val => val.title === product.title)
+
+    this.cartProducts.splice(index, 1)
+    return from([{ inCart: false }])
 
   }
 
 
-  updateCount(){
+  updateCount() {
     this.count = this.cartProducts.length
 
   }
 
 
 
-  updateQuantity(product, quantity){
-    let index = this.cartProducts.findIndex( val => val.category_name === product.category_name)
+  updateQuantity(product, quantity) {
+    let index = this.cartProducts.findIndex(val => val.title === product.title)
     this.cartProducts[index].quantity = quantity
+
   }
+
+
+
+  calculateTotal() {
+    this.total = 0
+
+    this.cartProducts.forEach(
+      product => {
+
+        this.total += Number(product.quantity * product.precio)
+
+
+      }
+    )
+
+    return this.total
+  }
+
+
+
+
+
+  IncreaseTotal() {
+    this.total = 0
+
+    this.cartProducts.forEach(
+      product => {
+
+        this.total += Number(product.quantity * product.precio)
+
+
+      }
+    )
+
+    return this.total
+  }
+
+
+
+
+  decreaseTotal() {
+    this.total = 0
+
+    this.cartProducts.forEach(
+      product => {
+
+        this.total -= (product.quantity * product.precio)
+
+
+      }
+    )
+
+    return this.total * -1
+  }
+
+
+
+
 
 
 

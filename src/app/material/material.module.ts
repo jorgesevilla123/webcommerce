@@ -29,7 +29,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio'
 import {  MatDatepickerModule, MatDatepickerActions } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
-
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 
 
@@ -67,7 +68,9 @@ import { MatNativeDateModule } from '@angular/material/core'
     MatCheckboxModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonToggleModule,
+    MatProgressBarModule
   ],
   exports: [
     CommonModule,
@@ -100,7 +103,9 @@ import { MatNativeDateModule } from '@angular/material/core'
     MatCheckboxModule,
     MatRadioModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonToggleModule,
+    MatProgressBarModule
     
   ]
 })

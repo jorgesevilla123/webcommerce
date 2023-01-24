@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild,} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms'
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,16 +6,17 @@ import { getCategories } from 'FOR-TEST/products-management'
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
-
+import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 @Component({
   selector: 'app-lavadora-sections',
   templateUrl: './lavadora-sections.component.html',
   styleUrls: ['./lavadora-sections.component.scss']
 })
-export class LavadoraSectionsComponent implements OnInit {
-
-  constru
-
+export class LavadoraSectionsComponent implements OnInit{
+  @Input() data: any
+  @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
+  
+  products: any
   filters = new FormControl(null);
   sort = new FormControl('');
   categoryValues: Array<any> = []
@@ -24,6 +25,10 @@ export class LavadoraSectionsComponent implements OnInit {
   matchExist: boolean
   isFiltering: boolean
   page_name: any
+  isMobile: boolean 
+  pager: any
+  pageName: any
+  completed = false
 
 
 
@@ -91,16 +96,23 @@ export class LavadoraSectionsComponent implements OnInit {
     public productService: ProductsService
   ) { }
 
+
+
+
+
+
+  
+
+
+
+
   ngOnInit(): void {
+    
+    this.pageName = 'lavadora'
+
+
     this.isFiltering = true
     this.matchExist = true
-
-    console.log(this.router.url)
-    this.sectionsToRender = this.sections_template
-
-   
-
-    this.totalItems = this.sections_template.length
 
 
 
@@ -115,19 +127,40 @@ export class LavadoraSectionsComponent implements OnInit {
     this.route.queryParams.subscribe(
       val => {
         console.log(val)
-        this.routeData = {route: '/sections', queryParams: this.router.url}
-        this.category = val.category
-        this.page_name = val.section
         this.currentPage = val.page
+        this.getProducts('lavadora', this.currentPage)
+        setTimeout(() => {
+          this.completed = true
+        })
 
       }
     )
+  }
 
 
 
-
+  
+  
+  getProducts(category, page){
+    console.log(category)
+    this.productService.getProductsCategory(category, page).subscribe(
+      pager => {
+        this.pager = pager
+        this.sectionsToRender = pager.pageOfItems
+        console.log(pager)
+      }
+    )
 
   }
+
+
+  setNoPaginator(){
+    this.completed = false
+  }
+
+
+
+
 
 
 
@@ -268,8 +301,6 @@ export class LavadoraSectionsComponent implements OnInit {
       this.isFiltering = true
       this.matchExist = true
     }
- 
- 
   }
 
 
@@ -284,7 +315,7 @@ export class LavadoraSectionsComponent implements OnInit {
   getDescription(data) {
     console.log(data)
     let route_data = JSON.stringify(data)
-    let route = `/${data.route}/${data.category_name}?d=${route_data}`
+    let route = `/product-details/${data.title}?d=${route_data}`
     this.router.navigateByUrl(route)
 
   }
@@ -294,7 +325,7 @@ export class LavadoraSectionsComponent implements OnInit {
   
 
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.category_name === product.category_name)
+    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }
@@ -310,6 +341,7 @@ export class LavadoraSectionsComponent implements OnInit {
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
+    this.cartDrawer.open()
     this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
   }
 

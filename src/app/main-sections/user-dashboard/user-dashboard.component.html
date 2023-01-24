@@ -1,0 +1,22 @@
+
+
+
+<mat-card class="wrapper">
+    <div class="sidebar">
+        <h1 class="sidebar-title">Panel de control</h1>
+        <button routerLink="/dashboard/account" mat-raised-button class="sidebar-button">Tu cuenta y ajustes<mat-icon>person</mat-icon><mat-icon>settings</mat-icon></button>
+        <button routerLink="/dashboard/purchases" mat-raised-button class="sidebar-button">Compras <mat-icon>shopping_bag</mat-icon></button>
+        <button routerLink="/dashboard/cart" mat-raised-button class="sidebar-button">Carrito de compras <mat-icon>shopping_cart</mat-icon></button>
+        <button routerLink="/dashboard/shipping" mat-raised-button class="sidebar-button">Direcciones de envio <mat-icon>local_shipping</mat-icon></button>
+    
+    
+
+    </div>
+    <div class="dashboard">
+        <h1 class="dashboard-title">Bienvenida Niki! </h1>
+
+        <router-outlet></router-outlet>
+        
+    </div>
+
+</mat-card>

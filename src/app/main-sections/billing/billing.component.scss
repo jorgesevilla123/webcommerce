@@ -1,0 +1,58 @@
+
+
+
+.wrapper{
+    display: grid;
+    margin: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+}
+
+
+
+.shipping-form{
+    margin-top: 20px;
+}
+
+
+.address-field{
+    margin: 5px;
+}
+
+
+.address-field-aditional{
+    margin: 5px;
+    width: 400px;
+}
+
+
+.new-address-button{
+    margin-bottom: 40px;
+    width: 400px;
+    height: 50px;
+    background-color: dodgerblue;
+    color: white;
+}
+
+
+
+.address-section{
+    margin-top: 40px;
+}
+
+
+.step1{
+    margin: 20px;
+}
+
+.fixed.button{
+    position: fixed;
+    bottom: 0px;
+    right: 0px; 
+    margin-bottom: 20px;
+    margin-right: 80px;
+    color: dodgerblue;
+    background-color: white;
+    width: auto;
+    height: 50px;
+}

@@ -10,6 +10,8 @@
 
 
 .products-img{
+    height: 150px;
+    width: auto;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -22,4 +24,19 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+
+
+.cart-button{
+    width: 100%;
+    color: dodgerblue;
+    margin-bottom: 10px;
+}
+
+.cart-button-delete{
+    width: 100%;
+    color: red;
+    margin-bottom: 10px;
+}
+
 

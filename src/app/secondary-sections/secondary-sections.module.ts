@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
-import { CategoriesComponent } from './categories/categories.component';
 import { MainSectionsModule } from '../main-sections/main-sections.module';
 import { LightningSectionComponent } from './lightning-section/lightning-section.component';
 import { PaginationComponent } from './pagination/pagination.component';
@@ -14,11 +13,17 @@ import { MarcasComponent } from './marcas/marcas.component';
 import { SecadoraSectionsComponent } from './secadora-sections/secadora-sections.component';
 import { AutomotrizSectionsComponent } from './automotriz-sections/automotriz-sections.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { CartOverviewComponent } from './cart-overview/cart-overview.component';
+import { UserAccountComponent } from './user-account/user-account.component';
+import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
+import { UsersCartComponent } from './users-cart/users-cart.component';
+import { UserShippingComponent } from './user-shipping/user-shipping.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { ShippingModalComponent } from './shipping-modal/shipping-modal.component';
 
 
 @NgModule({
   declarations: [
-    CategoriesComponent,
     LightningSectionComponent,
     PaginationComponent,
     ProductsDescriptionComponent,
@@ -27,7 +32,14 @@ import { SearchResultsComponent } from './search-results/search-results.componen
     MarcasComponent,
     SecadoraSectionsComponent,
     AutomotrizSectionsComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
+    CartOverviewComponent,
+    UserAccountComponent,
+    UserPurchasesComponent,
+    UsersCartComponent,
+    UserShippingComponent,
+    UserSettingsComponent,
+    ShippingModalComponent
   ],
   imports: [
     CommonModule,

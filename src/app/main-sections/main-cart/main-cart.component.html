@@ -1,8 +1,6 @@
-<app-main-toolbar>
 
 
 
- 
     <div *ngIf="cartProducts.length === 0; else productsCart">
         <h4>No hay productos en el carrito</h4>
     </div>
@@ -11,38 +9,52 @@
 
 
     <ng-template #productsCart>
-      
-          
-        <mat-grid-list style="background-color: white; height: 100%;" cols="{{sections[0].cols}}" rowHeight="{{sections[0].rowHeight}}">
+
+
+        <mat-grid-list style="background-color: white; height: 100%;" rowHeight="450px" cols="3">
             <h2>Productos en el carrito</h2>
 
 
-                        <mat-grid-tile *ngFor="let template of cartProducts">
-                <div>
+            <mat-grid-tile *ngFor="let product of cartProducts">
+
+
+
+                <div style="width: 250px" class="products-ui">
 
 
                     <div class="image">
-                        <img class="products-img" [attr.width]="template.img_w" [attr.height]="template.img_h"
-                            [src]="template.img_src" alt="">
+                        <img class="products-img" [src]="product.imagePath" alt="">
 
                     </div>
 
-                    <button mat-button>{{template.category_name}} | cantidad: {{template.quantity}}</button>
+                    <div>
 
-                    <div class="action-buttons">
-                        <button mat-stroked-button (click)="updateQuantity(template)">
-                            cantidad<mat-icon>edit</mat-icon>
-                        </button>
+                        <h4 class="product-title">{{product.title}}</h4>
+                        <div style="display: inline-flex;">
+                            <h3 style="color: rgb(1, 157, 1); margin-right: 50px;">{{product.precio | currency: 'USD'}}</h3>
+                            <h3 style="font-weight: 400;">Cantidad: {{product.quantity}}</h3>
 
-                        <button  mat-stroked-button (click)="removeProduct(template)">
-                            Eliminar<mat-icon>cancel</mat-icon>
-                        </button>
-    
-    
+
+                        </div>
+                       
+
+                            <button class="cart-button" mat-stroked-button (click)="updateQuantity(product)">
+                                Editar cantidad <mat-icon>edit</mat-icon>
+                            </button>
+                 
+
+                            <button class="cart-button-delete" mat-stroked-button (click)="removeProduct(product)">
+                                Eliminar del carrito <mat-icon>delete_forever</mat-icon>
+                            </button>
+                  
+
 
                     </div>
-               
+
+
+
                 </div>
+
 
 
             </mat-grid-tile>
@@ -50,7 +62,7 @@
 
         </mat-grid-list>
 
-  
+
 
     </ng-template>
 
@@ -61,4 +73,3 @@
 
 
 
-</app-main-toolbar>

@@ -1,12 +1,20 @@
+
+
+
+
+
+    
+
+
 <div class="paginator-container">
 
     <!-- here implement first page button -->
-    <button mat-button [ngClass]="{disabled: pager.currentPage === 1 }" (click)="route(1)">Primera</button>
+    <button mat-button [ngClass]="{disabled: pager.pager.currentPage === 1 }" (click)="route(1)">Primera</button>
     <!-- ------------------------- -->
 
 
     <!-- here implement previous pag button -->
-    <button mat-button [ngClass]="{disabled: pager.currentPage === 1 }" (click)="backButton()">
+    <button mat-button [ngClass]="{disabled: pager.pager.currentPage === 1 }" (click)="backButton()">
         <mat-icon>arrow_back_ios</mat-icon>
     </button>
     <!-- ............................ -->
@@ -17,8 +25,8 @@
 
     <!-- implement multiple pages here -->
 
-    <div style="display:inline-flex" *ngFor="let page of pager.pages" [ngClass]="{active: pager.currentPage === page}">
-        <div *ngIf="pager.currentPage === page; then activeButton else notActive"></div>
+    <div style="display:inline-flex" *ngFor="let page of pages" [ngClass]="{active: pager.pager.currentPage === page}">
+        <div *ngIf="pager.pager.currentPage === page; then activeButton else notActive"></div>
         <ng-template #activeButton>
 
             <button disabled style="background-color: dodgerblue; color: white;" mat-mini-fab>{{page}}</button>
@@ -48,8 +56,9 @@
 
 
     <!-- here implement last page button -->
-    <button mat-button [ngClass]="{disabled: pager.currentPage === pager.totalPages}" (click)="route(pager.totalPages)">Ultima pag</button>
+    <button mat-button [ngClass]="{disabled: pager.currentPage === pager.totalPages}" (click)="route(pager.pager.endPage)">Ultima pag</button>
     <!-- ............................... -->
 
 
 </div>
+

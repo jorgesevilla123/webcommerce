@@ -1,0 +1,32 @@
+<div class="wrapper">
+    <div class="box1">
+        <mat-card style="display: grid; place-items: center; padding-bottom: 20px;">
+            <img style="width: 200px;" src="../../assets/finishedlogo.png" alt="">
+            <br/>
+        
+            <h2 mat-card-title>Iniciar sesion</h2>
+            <div class="input-group">
+                <form [formGroup]="loginForm">
+
+                    <div class="email-form">
+                        <label class="label">Escribe tu correo de inicio de sesion</label>
+                        <input placeholder="Ej. direccion@correo.com" autocomplete="off" formControlName="login" name="Email" id="Email" class="input" type="email">
+                        <div></div>
+                    </div>
+                    
+
+                    <div class="password-form">
+                        <label class="label">Escribe tu contrasena</label>
+                        <input placeholder="contraseña" autocomplete="off" formControlName="password" name="Email" id="Email" class="input" type="password">
+                        <div></div>
+                    </div>
+                     
+                        <button style="width: 100%; margin-top: 20px; background-color: #1e90ff; color: white;" mat-stroked-button type="submit" (click)="submitLogin()">Iniciar sesion <mat-icon>login</mat-icon></button>
+                </form>
+            </div>
+            <p style="margin-top: 20px;">No tienes una cuenta todavia?</p> 
+            <button routerLink="/registration"  mat-stroked-button style="width: 80%;">Crear cuenta</button>
+            </mat-card>
+    </div>
+  </div>
+  

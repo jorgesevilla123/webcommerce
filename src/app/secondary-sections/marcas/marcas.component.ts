@@ -78,6 +78,8 @@ export class MarcasComponent implements OnInit {
   category: any
   currentPage: any
   totalItems: any
+  isMobile: boolean
+  pager: any 
 
 
 
