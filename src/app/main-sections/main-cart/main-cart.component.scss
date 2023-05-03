@@ -1,42 +1,295 @@
+ .card-content {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     place-items: center;
+     max-height: 400px;
+     overflow-y: auto;
+ }
+
+
+ .product-cart {
+     margin-bottom: 20px;
+     margin-top: 20px;
+
+     height: auto;
+ }
+
+
+ .products-img {
+     height: 120px;
+     width: auto;
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+ }
 
 
 
-.image{
-    margin-left: auto;
-    margin-right: auto;
-
-}
 
 
 
-.products-img{
-    height: 150px;
+
+
+
+
+ .image {
+    display: block;
+     margin-left: auto;
+     margin-right: auto;
+
+ }
+
+
+
+ .products-img {
+     height: auto;
+     width: 80px;
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+ }
+
+
+
+ .action-buttons {
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+ }
+
+
+
+ .cart-button {
+     width: 100%;
+     color: dodgerblue;
+     margin-bottom: 10px;
+ }
+
+ .cart-button-delete {
+     width: 100%;
+     color: red;
+     margin-bottom: 10px;
+ }
+
+
+ .pay-button {
+     margin: 15px;
+     background-color: dodgerblue;
+     color: white;
+     width: 200px;
+     height: 50px;
+     margin-left: auto;
+
+ }
+
+
+ .card-action {
+     display: flex;
+     flex-flow: row wrap;
+     align-items: baseline;
+ }
+
+
+
+
+ .container {
+    height: auto;
+
+
+     margin-left: 40px;
+     margin-right: 40px;
+
+ }
+
+ .grid-cart-container {
+    margin-top: 20px;
+     display: grid;
+     column-gap: 10px;
+     grid-template-columns: repeat(10, 1fr);
+
+ }
+
+
+ .cart-section {
+    overflow-y: auto;
+    max-height: 450px;
     width: auto;
+    background: white;
+    box-shadow: 15px 15px 30px #bebebe,
+        -15px -15px 30px #ffffff;
+   
+
+     grid-column-start: 1;
+     grid-column-end: 9;
+     display: flex;
+     flex-flow: wrap;
+
+ }
+
+ .payment-section {
+ 
+     grid-column-start: 9;
+     grid-column-end: 14;
+     display: flex;
+     width: auto;
+   
+
+ }
+
+
+ .card {
+    margin-bottom: 20px;
+    align-items: center;
+    align-items: baseline;
+
+
+     display: flex;
+     flex-flow: row wrap;
+     justify-content: space-around;
+     width: 100%;
+     height: 80px;
+     background: #ffffff;
+
+ }
+
+
+
+
+
+
+ .card-original {
+    display: flex;
+    flex-direction: column;
+     width: 100%;
+     height: 200px;
+     background: white;
+     box-shadow: 15px 15px 30px #bebebe,
+         -15px -15px 30px #ffffff;
+ }
+
+ .cart-product-display{
+    width: 300px;
+    max-height: 50%;
+  
+
+}
+
+.product-cart{
+    
+    margin: 20px;
+   
+    width: auto;
+    margin-top: 20px;
+    height: auto;
+}
+
+
+.product-title:hover{
+    text-decoration: underline;
+
+
+}
+
+
+
+
+.recommendations-section{
+    margin-top: 40px;
+    height: auto;
+    overflow-y: auto;
+    max-height: 420px;
+    width: 100%;
+    background: white;
+    box-shadow: 15px 15px 30px #bebebe,
+        -15px -15px 30px #ffffff;
+   
+
+
+}
+
+
+.card-2 {
+    width: 250px;
+    height: 274px;
+    background: white;
+    padding: .4em;
+    border-radius: 6px;
+  }
+  
+
+  .category {
+    text-transform: uppercase;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: rgb(63, 121, 230);
+    padding: 10px 7px 0;
+  }
+  
+  .category:hover {
+    cursor: pointer;
+  }
+  
+  .heading {
+    font-weight: 400;
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .heading:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .author {
+    color: green;
+    font-weight: 400;
+    font-size: 18px;
+    padding-top: 20px;
+    text-align: center;
+  }
+  
+  .name {
+    font-weight: 600;
+  }
+  
+  .name:hover {
+    cursor: pointer;
+  }
+
+
+  .recommended-products-img {
+    height: auto;
+    width: 120px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    transition: 150px;
 }
 
 
 
-.action-buttons{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.recommended-products-img:hover {
+  transition: 200ms;
+  height: auto;
+  width: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.gray {
+  background-color: gray;
+}
+.green {
+  background-color: green;
 }
 
 
 
-.cart-button{
-    width: 100%;
-    color: dodgerblue;
-    margin-bottom: 10px;
-}
 
-.cart-button-delete{
-    width: 100%;
-    color: red;
-    margin-bottom: 10px;
-}
+
 
 

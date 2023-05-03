@@ -1,3 +1,9 @@
+
+
+
+
+
+
 <app-cart-overview>
 
 
@@ -127,23 +133,24 @@
         <mat-grid-tile *ngFor="let product of sectionsToRender">
 
             <!-- this is the product card -->
-            <div style="width: 250px" class="products-ui" >
-              
-    
-                <div class="image">
+            <div style="width: 250px" class="products-ui">
+                <div class="image" (click)="getDescription(product)">
                     <img class="products-img" 
                         [src]="product.imagePath" alt="">
-
                 </div>
+
+
+                
 
                 <div>
                     
                 <h4 class="product-title" (click)="getDescription(product)">{{product.title}}</h4>
+
+                
                 <h2 style="color: rgb(1, 157, 1);">{{product.precio | currency: 'USD'}}</h2>
 
                 
                 <div *ngIf="checkCart(product); then isInCart else notInCart"></div>
-
 
 
                 <ng-template #isInCart>

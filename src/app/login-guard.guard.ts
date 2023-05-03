@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { Observable } from 'rxjs';
 import { LoginService } from '../app/services/login.service'
 import { AlertService } from '../app/shared/alert.service'
+import { Router } from '@angular/router'
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class LoginGuardGuard implements CanActivate {
 
   constructor(
     public loginService: LoginService,
-    public alert: AlertService
+    public alert: AlertService,
+    public router: Router
   ){
 
   }
@@ -27,7 +29,7 @@ export class LoginGuardGuard implements CanActivate {
         
       }
       else {
-        this.alert.notifyWarn('Algunos datos son incorrectos', 2000, 'top', 'center')
+        this.router.navigate(['/login'])
         return false
       }
     

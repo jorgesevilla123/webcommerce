@@ -4,24 +4,24 @@
             <img style="width: 200px;" src="../../assets/finishedlogo.png" alt="">
             <br/>
         
-            <h2 mat-card-title>Iniciar sesion</h2>
+            <h3 mat-card-title>Inicia sesion para comprar y recibir tus productos</h3>
             <div class="input-group">
-                <form [formGroup]="loginForm">
+                <form class="login-form" [formGroup]="loginForm">
 
-                    <div class="email-form">
+                    <div class="email">
                         <label class="label">Escribe tu correo de inicio de sesion</label>
-                        <input placeholder="Ej. direccion@correo.com" autocomplete="off" formControlName="login" name="Email" id="Email" class="input" type="email">
+                        <input style="max-width: 100%;" placeholder="Ej. direccion@correo.com" autocomplete="off" formControlName="login" name="Email" id="email" class="input" type="email">
                         <div></div>
                     </div>
                     
 
-                    <div class="password-form">
+                    <div class="password">
                         <label class="label">Escribe tu contrasena</label>
-                        <input placeholder="contraseña" autocomplete="off" formControlName="password" name="Email" id="Email" class="input" type="password">
+                        <input style="max-width: 100%;" placeholder="contraseña" autocomplete="off" formControlName="password" name="Email" id="password" class="input" type="password">
                         <div></div>
                     </div>
                      
-                        <button style="width: 100%; margin-top: 20px; background-color: #1e90ff; color: white;" mat-stroked-button type="submit" (click)="submitLogin()">Iniciar sesion <mat-icon>login</mat-icon></button>
+                        <button style="width: 100%; margin-top: 20px; background-color: #1e90ff; color: white;" mat-stroked-button type="submit" (click)="submitLogin()" routerLink="/dashboard">Iniciar sesion <mat-icon>login</mat-icon></button>
                 </form>
             </div>
             <p style="margin-top: 20px;">No tienes una cuenta todavia?</p> 

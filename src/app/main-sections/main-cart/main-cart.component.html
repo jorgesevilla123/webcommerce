@@ -1,14 +1,415 @@
+<!-- <div *ngIf="isLoggeedIn(); else productsCart">
+    <h4>No hay productos en el carrito</h4>
+</div> -->
 
 
 
-    <div *ngIf="cartProducts.length === 0; else productsCart">
-        <h4>No hay productos en el carrito</h4>
+
+
+
+
+    <div class="container">
+
+        <h1 style="margin-top: 20px; margin-left: 20px;">Carrito de compras</h1>
+
+        <mat-checkbox style="margin-left: 20px;" (change)="toggleAll($event)"><b>Seleccionar todos los productos</b></mat-checkbox>
+
+
+
+        <div class="grid-cart-container">
+
+
+
+
+
+
+
+            <div class="cart-section">
+
+
+
+                <div *ngFor="let product of cartProducts" class="product-cart">
+
+                    <button style="float: right;margin-right: 40px;" mat-icon-button disableRipple
+                        (click)="removeProduct(product)"><mat-icon style="color: red;">delete</mat-icon></button>
+
+
+
+
+                    <mat-checkbox #checkbox [checked]="product.selected" (change)="selectProduct(checkbox, product)"></mat-checkbox>
+
+
+                    <div class="image">
+                        <img class="products-img" src="../../../assets/bombillo 15w.jpeg">
+                    </div>
+
+
+
+
+
+                    <div class="product-title">
+                        <p style="font-size: 12px; text-align: center;">{{product.title}}</p>
+
+                    </div>
+
+                    <div class="price-quantity" style="display:flex; margin-left: 20px; align-items: baseline;">
+
+
+                        <mat-button-toggle-group style="width: 100%;" name="fontStyle" aria-label="Font Style">
+                            <mat-button-toggle
+                                (click)="decreaseQuantity(product)"><mat-icon>remove</mat-icon></mat-button-toggle>
+                            <mat-button-toggle>{{product.quantity}}</mat-button-toggle>
+                            <mat-button-toggle
+                                (click)="increaseQuantity(product)"><mat-icon>add</mat-icon></mat-button-toggle>
+                        </mat-button-toggle-group>
+
+
+                        <h3 style="margin-left: 20px; color: green">{{product.quantity*product.precio | currency:
+                            'USD'}}</h3>
+
+
+
+
+
+
+
+
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="payment-section">
+                <div class="card-original">
+
+                    <h2 style="margin-top: 20px; margin-left: 10px">Resumen del pedido</h2>
+
+                    <div style="display: flex; flex-flow: row nowrap;">
+                        <h3 style="align-self: flex-start;margin-left: 20px;">Subtotal</h3>
+                        <h1 style="color: green; margin-left:auto; margin-right: 20px; font-weight: 200;">{{total |
+                            currency: 'USD'}}</h1>
+
+                    </div>
+                    <button routerLink="/pago" mat-stroked-button [disabled]="deselected" [ngClass]=" deselected ? { gray: true} : {green: true }"
+                        style="margin-left: auto; margin-right: auto; color: white; width: 80%; height: 50px; font-size: 18px; font-weight: 100; margin-top: auto; margin-bottom: 20px;">Procesar
+                        compra</button>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+
+
     </div>
 
 
 
 
-    <ng-template #productsCart>
+
+
+
+
+
+
+
+
+
+
+    <div class="recommendations-grid-container">
+
+        <div class="recommendations-section">
+
+
+
+
+
+            <h1 style="margin-top: 20px; margin-left: 20px;">Productos que te podrian interesar</h1>
+
+            <ngb-carousel [interval]="3000">
+
+                <ng-template ngbSlide>
+                    <div style="display: flex; margin-left: 30px; margin-right: 30px; justify-content: center;">
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W </div>
+                            <div class="author">{{200 | currency: 'USD'}}</div>
+
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                          
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                          
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+
+                </ng-template>
+                <ng-template ngbSlide>
+                    <div style="display: flex; margin-left: 30px; margin-right: 30px; justify-content: center;">
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+
+
+                        <div class="card-2">
+                            <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                            </div>
+
+                            <div class="heading"> Bombillo de 15W</div>
+                                <div class="author">{{200 | currency: 'USD'}}</div>
+                            
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </ng-template>
+            </ngb-carousel>
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--     
+
+    <mat-card>
+
+        <div mat-card-title>
+            <h1>Producto en el carrito</h1>
+        </div>
+
+        <div class="card-content" mat-card-content>
+
+            <div *ngFor="let product of cartProducts" class="product-cart">
+                <button style="float: right;margin-right: 40px;" mat-icon-button disableRipple (click)="removeProduct(product)">Eliminar <mat-icon style="color: red;">delete</mat-icon></button>
+          
+                  <div class="image">
+                      <img class="products-img" 
+                          [src]="product.imagePath" >
+                  </div>
+          
+          
+                  <div class="product-title">
+                    <button mat-button >{{product.title}}</button>
+          
+                  </div>
+          
+                  <div class="price-quantity" style="display:flex; margin-left: 20px;">
+
+                    <div *ngIf="product.quantity >= 2; then active else disabled"></div>
+      
+      
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                      <ng-template #active>
+                        <mat-button-toggle (click)="decreaseQuantity(product)"><mat-icon>remove</mat-icon></mat-button-toggle>
+                      </ng-template>
+                      <ng-template #disabled>
+                        <mat-button-toggle disabled style="background-color: rgb(132, 132, 132)"><mat-icon>remove</mat-icon></mat-button-toggle>
+                      </ng-template>
+                      <mat-button-toggle>{{product.quantity}}</mat-button-toggle>
+                      <mat-button-toggle   (click)="increaseQuantity(product)"><mat-icon>add</mat-icon></mat-button-toggle>
+                    </mat-button-toggle-group>
+      
+                    <h1 style="margin-left: auto; margin-right: 10px; color: black">{{product.quantity*product.precio | currency: 'USD'}}</h1>
+      
+      
+      
+                  </div>
+          
+             
+              </div>
+          
+
+
+
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div mat-card-action class="card-action">
+            <h1>Total</h1>
+            <h1 style="margin-left: 40px;">{{total | currency: 'USD'}}</h1>
+            <button class="pay-button" mat-stroked-button routerLink="/pago">Continuar a pago <mat-icon>payments</mat-icon></button>
+
+
+
+        </div>
+
+
+
+    </mat-card>
+
+
+ -->
+
+
+
+    <!-- 
+
 
 
         <mat-grid-list style="background-color: white; height: 100%;" rowHeight="450px" cols="3">
@@ -60,16 +461,5 @@
             </mat-grid-tile>
 
 
-        </mat-grid-list>
-
-
-
-    </ng-template>
-
-
-
-
-
-
-
+        </mat-grid-list> -->
 

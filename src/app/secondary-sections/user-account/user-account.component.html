@@ -14,10 +14,10 @@
         <h3>+58 04149675244</h3>
     </div>
     <div class="personal-info">
-        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button>Cambiar correo <mat-icon>alternate_email</mat-icon></button>
-        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button>Cambiar contraseña <mat-icon>key</mat-icon></button>
-        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button>Cambiar numero de telefono <mat-icon>call</mat-icon></button>
-        <button style="width: 300px; margin-bottom: 20px; background-color: red; color: white;" mat-stroked-button>Cerrar sesion<mat-icon>delete</mat-icon></button>
+        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button (click)="openUpdateModal('Actualizar Correo', 'email')">Cambiar correo <mat-icon>alternate_email</mat-icon></button>
+        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button (click)="openUpdateModal('', 'password')">Cambiar contraseña <mat-icon>key</mat-icon></button>
+        <button style="width: 300px; margin-bottom: 20px;" mat-stroked-button (click)="openUpdateModal('Actualizar numero', 'number')">Cambiar numero de telefono <mat-icon>call</mat-icon></button>
+        <button style="width: 300px; margin-bottom: 20px; background-color: red; color: white;" mat-stroked-button (click)="logout()">Cerrar sesion<mat-icon>delete</mat-icon></button>
     
 
     </div>

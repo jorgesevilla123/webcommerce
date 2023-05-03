@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoginService } from '../../services/login.service'
+import { AlertService } from 'src/app/shared/alert.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,12 +15,15 @@ export class RegistrationComponent implements OnInit {
   registrationForm: FormGroup = new FormGroup({
     name: new FormControl(''), 
     email: new FormControl(''),
+    contact_phone: new FormControl(''),
     password: new FormControl(''),
     repeatPassword: new FormControl('')
   })
 
   constructor(
-    public loginService: LoginService
+    public loginService: LoginService,
+    public alert: AlertService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -28,25 +33,43 @@ export class RegistrationComponent implements OnInit {
   register(){
     let name = this.registrationForm.get('name').value
     let email = this.registrationForm.get('email').value
+    let contact_phone = this.registrationForm.get('contact_phone').value
     let password = this.registrationForm.get('password').value
     let repeatPassword = this.registrationForm.get('repeatPassword').value
-    console.log(name, email, password, repeatPassword)
+    let newUser = {
+      name: name,
+      email: email,
+      contact_phone: contact_phone,
+      password: password,
+      repeatPassword: repeatPassword
+    }
 
-    let user = this.loginService.users.find(
-      val => val.email === email
+    this.loginService.createUser(newUser).subscribe(
+      val => {
+        if(val.created){
+          console.log(val)
+          console.log(val.profile)
+          this.loginService.setLogin(val.profile)
+          this.alert.notifySuccess('Usuario creado!', 2000, 'top', 'center')
+          setTimeout( () => {
+            this.router.navigate(['/dashboard'])
+
+          }, 1000)
+        }
+        else {
+          this.alert.notifySuccess(val.message, 2000, 'top', 'center')
+        }
+      }
     )
-    
-    if(password !== repeatPassword){
-      console.log('Not the same password')
-    }
-    else {
-      
 
-      let passwordMatch = user.password === password
 
-      passwordMatch ? this.loginService.setLogin() : this.loginService.setLogout()
-     
+
+  
     }
+
+
+
+
   }
 
-}
+

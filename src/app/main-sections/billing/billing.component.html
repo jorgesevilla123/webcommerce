@@ -1,168 +1,374 @@
-
-
-
-
-
 <div class="wrapper">
     <div>
-        
-
-<mat-vertical-stepper style="height: auto;" [linear]="true" #stepper [animationDuration]="'200'">
-    <mat-step>
-        <form>
-            <ng-template matStepLabel style="font-size: 30px;" matStepperIcon="payments">Forma de pago</ng-template>
-            <h2>Selecciona el metodo de pago de tu preferencia</h2>
-            <form>
-                <mat-form-field appearance="fill">
-                    <mat-label>Metodo de pago</mat-label>
-                    <mat-select [(ngModel)]="selectedValue" name="food">
-                        <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{food.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <p> Metodo de pago seleccionado:  <b>{{selectedValue}}</b></p>
-
-            </form>
-            <div>
-                <button mat-button matStepperNext>Siguiente</button>
-            </div>
-        </form>
-    </mat-step>
-    <mat-step [stepControl]="shippingAddressForm" completed="false" editable="false" disabled>
-
-        <div *ngIf="loginService.isLogged(); then logged else notLogged"></div>
-        
-
-        <ng-template #logged>
-            <h2>Selecciona alguna de tus direcciones o crea una direccion donde quieres recibir tus productos</h2>
 
 
+        <mat-vertical-stepper style="height: auto;" [linear]="true" #stepper [animationDuration]="'200'">
+            <mat-step [stepControl]="loginService.shippingAddressForm">
 
-            <h3 style="font-weight: 300;">No tienes direcciones de envio agregadas, crea una nueva</h3>
-    
-    
-    
-    
-            <button class="new-address-button" mat-stroked-button>Agregar direccion de envio <mat-icon>add</mat-icon>
-                </button>
+                <mat-tab-group>
 
-        </ng-template>
-
-        <ng-template #notLogged>
-            <div style="margin: 20px;">
-
-                <h2>Inicia sesion y agrega alguna direccion de envio</h2>
-                <button mat-stroked-button routerLink="/login">Iniciar sesion <mat-icon>login</mat-icon></button>
-            </div>
-        </ng-template>
-       
+                    <mat-tab label="Direcciones agregadas">
 
 
-            <mat-divider></mat-divider>
+                        <div *ngIf="loginService.isLogged(); then logged else notLogged"></div>
+
+
+                        <ng-template #logged>
+
+                            <div *ngIf="shippingService.haveShipping(); then have else donthave"></div>
 
 
 
 
-            <div class="address-section">
-                <h3 style="font-weight: 300;">Si deseas solo enviar a alguna direccion en particular completa el siguiente formulario</h3>
+
+                            <ng-template #have>
+
+
+                                <h3 style="font-weight: 300;">Selecciona alguna de tus direcciones o crea una direccion
+                                    donde quieres recibir tus productos</h3>
+
+
+                                <div style="max-height: 200px; overflow-y: scroll;">
+
+
+                                    <div style="display: flex; max-width: 400; flex-flow: column wrap; margin-bottom: 10px;"
+                                        *ngFor="let shipping of loginService.selectedUser[0].shipping_addresses">
+
+                                        <mat-card class="shipping-card">
+
+                                            <mat-radio-button #radio
+                                                (click)="selectShipping(radio, shipping)"></mat-radio-button>
+                                            <h3>{{shipping.descripcion}} | </h3>
+                                            <small> {{shipping.avenida}}, {{shipping.calle}},
+                                                {{shipping.casa_apartamento}}</small>
+                                            <button style="font-size: 15px; margin-left: auto; margin-right: 20px;"
+                                                mat-button>Actualizar <mat-icon
+                                                    style="font-size: 18px;">edit</mat-icon></button>
+                                        </mat-card>
+                                    </div>
+
+                                </div>
+
+                                <mat-divider></mat-divider>
+
+                                <button class="new-address-button" mat-stroked-button (click)="openDialog()">Agregar
+                                    direccion de envio <mat-icon>add</mat-icon>
+                                </button>
+
+                    
 
 
 
-                <form class="shipping-form" [formGroup]="shippingAddressForm">
-                    <ng-template matStepLabel>Direccion de envio</ng-template>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Estado</mat-label>
-                        <mat-select>
-                            <mat-option *ngFor="let state of states" [value]="state.value">{{state.viewValue}}</mat-option>
-                        </mat-select>
-        
-                    </mat-form-field>
-                    <mat-form-field class="address-field" appearance="fill">
-                        <mat-label>Avenida</mat-label>
-                        <input matInput placeholder="Avenida" formControlName="avenida" required>
-                    </mat-form-field>
-                    <mat-form-field class="address-field" appearance="fill">
-                        <mat-label>Calle</mat-label>
-                        <input matInput placeholder="Calle" formControlName="calle" required>
-                    </mat-form-field>
-                    <mat-form-field class="address-field" appearance="fill">
-                        <mat-label>Casa o apartamento</mat-label>
-                        <input matInput placeholder="Casa o apartamento" formControlName="casa_apartamento" required>
-                    </mat-form-field>
-                    <mat-form-field class="address-field-aditional" appearance="fill">
-                        <mat-label>Informacion adicional de envio</mat-label>
-                        <input matInput placeholder="Agrega algun detalle que tengamos que saber sobre tu envio"
-                            formControlName="casa_apartamento">
-                    </mat-form-field>
+
+                                <div style="margin-bottom: 40px">
+                                    <button mat-button matStepperPrevious><mat-icon>navigate_before</mat-icon>
+                                        Volver</button>
+                                    <button style="background-color: green; color: white;" mat-stroked-button
+                                        matStepperNext>Confirmar datos y seleccionar
+                                        envio<mat-icon>arrow_forward</mat-icon></button>
+                                </div>
+
+
+                            </ng-template>
+
+
+                            <ng-template #donthave>
+
+
+                                <h3 style="font-weight: 400; margin-top: 20px;">No tienes direcciones de envio agregadas, agrega una para enviar tus productos</h3>
+
+                                <button class="new-address-button" mat-stroked-button (click)="openDialog()">Agregar
+                                    direccion de envio <mat-icon>add</mat-icon>
+                                </button>
+
+
+                                <mat-divider></mat-divider>
+
+
+
+                                <div>
+                                    <button mat-button matStepperPrevious><mat-icon>navigate_before</mat-icon>
+                                        Volver</button>
+                                    <button mat-button matStepperNext disabled>Siguiente
+                                        <mat-icon>navigate_next</mat-icon></button>
+                                </div>
+
+
+
+
+                            </ng-template>
+
+
+
+
+                        </ng-template>
+
+                        <ng-template #notLogged>
+                            <div style="margin: 20px;">
+
+                                <h2>Inicia sesion y agrega alguna direccion de envio</h2>
+                                <button mat-stroked-button routerLink="/login">Iniciar sesion
+                                    <mat-icon>login</mat-icon></button>
+                            </div>
+                        </ng-template>
+                    </mat-tab>
+
+
+
+
+
+
+                    <mat-tab label="Envio para direccion unica">
+
+
+                        <div class="address-section">
+                            <h3 style="font-weight: 300;">Si deseas solo enviar a alguna direccion en particular
+                                completa el siguiente formulario</h3>
+                            <form class="shipping-form" [formGroup]="loginService.shippingAddressForm">
+                                <ng-template matStepLabel>Direccion de envio</ng-template>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Estado</mat-label>
+                                    <mat-select>
+                                        <mat-option *ngFor="let state of states"
+                                            [value]="state.value">{{state.viewValue}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="address-field" appearance="fill">
+                                    <mat-label>Avenida</mat-label>
+                                    <input matInput placeholder="Avenida" formControlName="avenida" required>
+                                </mat-form-field>
+                                <mat-form-field class="address-field" appearance="fill">
+                                    <mat-label>Calle</mat-label>
+                                    <input matInput placeholder="Calle" formControlName="calle" required>
+                                </mat-form-field>
+                                <mat-form-field class="address-field" appearance="fill">
+                                    <mat-label>Casa o apartamento</mat-label>
+                                    <input matInput placeholder="Casa o apartamento" formControlName="casa_apartamento"
+                                        required>
+                                </mat-form-field>
+                                <mat-form-field class="address-field-aditional" appearance="fill">
+                                    <mat-label>Informacion adicional de envio</mat-label>
+                                    <input matInput
+                                        placeholder="Agrega algun detalle que tengamos que saber sobre tu envio"
+                                        formControlName="casa_apartamento">
+                                </mat-form-field>
+                                <div>
+                                    <button mat-button matStepperPrevious><mat-icon>navigate_before</mat-icon>
+                                        Volver</button>
+                                    <button mat-button matStepperNext>Siguiente
+                                        <mat-icon>navigate_next</mat-icon></button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </mat-tab>
+
+                </mat-tab-group>
+            </mat-step>
+
+            <mat-step>
+                <ng-template matStepLabel>Confirmacion de datos y tipo de envio</ng-template>
+
+                <h3 style="margin-top: 20px;">Datos</h3>
+
+
+                <mat-card>
+                    <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                        <h3 style="align-self: center;">
+                            Contacto
+                        </h3>
+                        <!-- <h3 style="align-self: center; font-weight: 200;">
+                            {{loginService.selectedUser[0].email}}
+                        </h3> -->
+
+                    </div>
+                    <mat-divider></mat-divider>
+
+
+                    <div
+                        style="display: flex; align-items: baseline; margin-top: 20px; justify-content: space-between;">
+                        <h3>
+                            Enviar a
+                        </h3>
+                        <h3>
+                            {{selectedShipping === undefined ? 'No has seleccionado un lugar para enviar' :
+                            selectedShipping.avenida}}
+                        </h3>
+                    </div>
+                </mat-card>
+
+
+
+
+
+
+
+                <h3 style="margin-top: 20px;">Tipo de envio o retiro</h3>
+                <mat-card>
+
+                    <div style="display: flex; align-items: baseline;">
+                        <mat-radio-button></mat-radio-button>
+                        <h3>Retirar en tienda</h3>
+                        <h3 style="margin-left: auto; color: green;">Sin costo</h3>
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div style="display: flex; align-items: baseline;  margin-top: 20px;">
+                        <mat-radio-button></mat-radio-button>
+                        <h3>Envio propio al mismo dia</h3>
+                        <h3 style="margin-left: auto; color: green;">Gratis</h3>
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div style="display: flex; align-items: baseline; margin-top: 20px;">
+                        <mat-radio-button></mat-radio-button>
+                        <h3>Envio con domi</h3>
+                        <h3 style="margin-left: auto;">{{3 | currency: 'USD'}}</h3>
+
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <div style="display: flex; align-items: baseline; margin-top: 20px;">
+                        <mat-radio-button></mat-radio-button>
+                        <h3>Envio con quik</h3>
+                        <h3 style="margin-left: auto;">{{3 | currency: 'USD'}}</h3>
+
+                    </div>
+
+                </mat-card>
+
+                <div>
+                    <button mat-button matStepperPrevious><mat-icon>navigate_before</mat-icon>
+                        Volver</button>
+                    <button mat-button matStepperNext>Siguiente
+                        <mat-icon>navigate_next</mat-icon></button>
+                </div>
+
+
+
+            </mat-step>
+
+
+
+
+
+
+
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel style="font-size: 30px;" matStepperIcon="payments">Forma de
+                        pago</ng-template>
+                    <h2>Selecciona el metodo de pago de tu preferencia</h2>
+                    <form>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Metodo de pago</mat-label>
+                            <mat-select [(ngModel)]="selectedValue" name="food">
+                                <mat-option *ngFor="let food of foods" [value]="food.value">
+                                    {{food.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <p> Metodo de pago seleccionado: <b>{{selectedValue}}</b></p>
+
+                    </form>
                     <div>
-                        <button mat-button matStepperPrevious><mat-icon>navigate_before</mat-icon> Volver</button>
-                        <button mat-button matStepperNext>Siguiente <mat-icon>navigate_next</mat-icon></button>
+                        <button mat-button matStepperNext>Siguiente</button>
                     </div>
                 </form>
-
-            </div>
-
-
-   
-    </mat-step>
-    <mat-step>
-
-        <div class="payment-confirmation">
-
-            <ng-template matStepLabel>Confirmacion de pago</ng-template>
-            <h3 style="font-weight: 300; margin-top: 20px;">Has seleccionado como metodo de pago <b>{{selectedValue}}</b> completa los siguientes pasos para validar el
-                pago 
-            </h3>
-
-            <div style="display: inline-flex;" class="step1">
-                <button style="background-color: dodgerblue; color: white;" mat-mini-fab disabled>1</button>
-                <h3 style="margin-left: 20px; font-weight: 300;">Verifica los productos en el recuadro derecho y realiza el pago de zelle por el monto indicado al correo: <b>jsdelduca@gmail.com</b> 
-                    <button matTooltip="Copiar correo" mat-icon-button><mat-icon>content_copy</mat-icon></button>
-            
-                </h3>
-            </div>
-
-            <mat-divider></mat-divider>
-
-
-            <div style="display: inline-flex;" class="step1">
-                <button style="background-color: dodgerblue; color: white;" mat-mini-fab disabled>2</button>
-                <h3 style="margin-left: 20px; font-weight: 300;">Escribe el numero de confirmacion en el formulario el cual sera verificado de inmediato</h3>
-            </div>
-
-
-
-            <form style="margin-left: 40px;" [formGroup]="confirmationForm">
-                <mat-form-field appearance="outline">
-                    <mat-label>Numero de confirmacion</mat-label>
-                    <input matInput placeholder="Ej. i34xjf9" formControlName="numero_confirmacion" required>
-                </mat-form-field>
-            </form>
-
-            <mat-divider></mat-divider>
-
-            <div style="display: inline-flex;" class="step1">
-                <button style="background-color: dodgerblue; color: white;" mat-mini-fab disabled>3</button>
-                <h3 style="margin-left: 20px; font-weight: 300;">Verificaremos de inmediato el pago y te notificaremos cuando tu pedido este en transito</h3>
-            </div>
-            <h3 style="margin-left: 40px">Estado del pago: <b>Procesando</b></h3>
-            <mat-progress-bar style="width: 80%; display: block; margin-left: auto; margin-right: auto; margin-bottom: 20px;" mode="indeterminate"></mat-progress-bar>
+            </mat-step>
 
 
 
 
 
-            
-          
+
+
+            <mat-step>
+                <div class="payment-confirmation">
+                    <ng-template matStepLabel>Confirmacion de pago</ng-template>
+                    <h3 style="font-weight: 300; margin-top: 20px;">Has seleccionado como metodo de pago
+                        <b>{{selectedValue}}</b> completa los siguientes pasos para validar el
+                        pago
+                    </h3>
+
+                    <div style="display: inline-flex;" class="step1">
+                        <button style="background-color: dodgerblue; color: white;" mat-mini-fab disabled>1</button>
+                        <h3 style="margin-left: 20px; font-weight: 300;">Verifica los productos en el recuadro derecho y
+                            realiza el pago de zelle por el monto indicado al correo: <b>jsdelduca@gmail.com</b>
+                            <button matTooltip="Copiar correo"
+                                mat-icon-button><mat-icon>content_copy</mat-icon></button>
+
+                        </h3>
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+
+                    <div style="display: inline-flex;" class="step1">
+                        <button style="background-color: dodgerblue; color: white;" mat-mini-fab disabled>2</button>
+                        <h3 style="margin-left: 20px; font-weight: 300;">Escribe el numero de confirmacion en el
+                            formulario el cual sera verificado de inmediato</h3>
+                    </div>
 
 
 
-        </div>
 
-      
-    </mat-step>
-</mat-vertical-stepper>
+                    <div style="display: flex; align-items: baseline; justify-content: space-evenly;">
+
+                        <form style="margin-left: 40px;" [formGroup]="confirmationForm">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Numero de confirmacion</mat-label>
+                                <input matInput placeholder="Ej. i34xjf9" formControlName="numero_confirmacion"
+                                    required>
+                            </mat-form-field>
+                        </form>
+
+                        <button style="background-color: green; color: white" mat-raised-button
+                            (click)="validate()">Validar codigo <mat-icon>done</mat-icon></button>
+                    </div>
+
+
+                    <div [ngSwitch]="paymentProcessed">
+
+
+                        <div *ngSwitchCase="'waitingCode'">
+                            <h3 style="margin-left: 40px">Estado del pago: <b>En espera de codigo</b></h3>
+                        </div>
+
+
+
+
+                        <div *ngSwitchCase="'processing'">
+                            <h3 style="margin-left: 40px">Estado del pago: <b>Procesando</b></h3>
+                            <mat-progress-bar
+                                style="width: 80%; display: block; margin-left: auto; margin-right: auto; margin-bottom: 20px;"
+                                mode="indeterminate"></mat-progress-bar>
+                        </div>
+
+                        <div *ngSwitchCase="'processed'">
+                            <h3 style="margin-left: 40px">Estado del pago: <b>Procesado <mat-icon>done</mat-icon></b>
+                            </h3>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+            </mat-step>
+        </mat-vertical-stepper>
 
 
 
@@ -179,8 +385,3 @@
     </div>
 
 </div>
-
-
-
-
-

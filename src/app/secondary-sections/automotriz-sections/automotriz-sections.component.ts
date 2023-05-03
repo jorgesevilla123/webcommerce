@@ -5,9 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getCategories } from 'FOR-TEST/products-management'
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
-import { AlertService } from 'src/app/shared/alert.service';
 import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
-
+import { LoginService } from '../../services/login.service'
 
 @Component({
   selector: 'app-automotriz-sections',
@@ -32,14 +31,14 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
   sections_template: Array<any> = [
-    { category_name: 'Evaporadores', category_id: [1],  route:"/categories", query: 'evaporador-auto',  img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Condensadores', category_id: [2],  route: "/categories",  query: 'condensador-auto',img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Sellos autommotriz', category_id: [6], route: "/categories",  query: 'sello-auto', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Deshidratadores', route: "/categories",  category_id: [6],   query: 'deshidratador-auto', img_src: '../assets/ip66.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Blowers', category_id: [],  route: "/categories", query: 'blower-auto', img_src: '../assets/lampara cuadrada.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Presostatos automotriz', category_id: [5], route: "/categories",  query: 'presostato-auto', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Rolineras automotriz', category_id: [], route:  "/categories",  query: 'rolinera-auto',img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px'},
-    { category_name: 'Valvulas block', category_id: [3],  route:"/categories",  query: 'valvula-block', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px'},
+    { category_name: 'Evaporadores', category_id: [1], route: "/categories", query: 'evaporador-auto', img_src: '../assets/bombillo 15w.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Condensadores', category_id: [2], route: "/categories", query: 'condensador-auto', img_src: '../assets/bombillo dicroico.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Sellos autommotriz', category_id: [6], route: "/categories", query: 'sello-auto', img_src: '../assets/bombillo emergencia.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Deshidratadores', route: "/categories", category_id: [6], query: 'deshidratador-auto', img_src: '../assets/ip66.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Blowers', category_id: [], route: "/categories", query: 'blower-auto', img_src: '../assets/lampara cuadrada.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Presostatos automotriz', category_id: [5], route: "/categories", query: 'presostato-auto', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Rolineras automotriz', category_id: [], route: "/categories", query: 'rolinera-auto', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px' },
+    { category_name: 'Valvulas block', category_id: [3], route: "/categories", query: 'valvula-block', img_src: '../assets/lampara redonda.jpeg', img_w: '100px', img_h: '100px' },
   ]
 
 
@@ -54,7 +53,7 @@ export class AutomotrizSectionsComponent implements OnInit {
   ]
 
 
-  
+
 
   sections = [
     {
@@ -81,8 +80,8 @@ export class AutomotrizSectionsComponent implements OnInit {
     public route: ActivatedRoute,
     public router: Router,
     public cartService: CartService,
-    public alert: AlertService,
-    public productService: ProductsService
+    public productService: ProductsService,
+    public loginService: LoginService
   ) { }
 
 
@@ -94,8 +93,8 @@ export class AutomotrizSectionsComponent implements OnInit {
     this.isFiltering = true
     this.matchExist = true
 
- 
-   
+
+
 
 
 
@@ -106,13 +105,13 @@ export class AutomotrizSectionsComponent implements OnInit {
       }
     )
 
-    
+
     this.route.queryParams.subscribe(
       val => {
         console.log(val)
         this.currentPage = val.page
         this.getProducts('automotriz', this.currentPage)
-        setTimeout( () => {
+        setTimeout(() => {
           this.completed = true
 
         }, 500)
@@ -128,9 +127,9 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
 
-  
-  
-  getProducts(category, page){
+
+
+  getProducts(category, page) {
     console.log(category)
     this.productService.getProductsCategory(category, page).subscribe(
       pager => {
@@ -259,17 +258,17 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
 
-  
 
-  filter(){
+
+  filter() {
     let filterValues = new Set(this.categoryValues)
 
 
-    let matched = this.sections_template.filter( value => 
-     value.category_id.some( n => filterValues.has(n))
+    let matched = this.sections_template.filter(value =>
+      value.category_id.some(n => filterValues.has(n))
     )
 
-    if(matched.length === 0){
+    if (matched.length === 0) {
       this.isFiltering = true
       this.matchExist = false
 
@@ -278,13 +277,13 @@ export class AutomotrizSectionsComponent implements OnInit {
     }
 
     else {
-      
+
       this.sectionsToRender = matched
       this.isFiltering = true
       this.matchExist = true
     }
- 
- 
+
+
   }
 
 
@@ -292,7 +291,7 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
 
-  
+
 
 
 
@@ -306,11 +305,11 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
 
-  
 
-  checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
-    if(isInCart){
+
+  checkCart(product) {
+    let isInCart = this.loginService.selectedUser.cart.some(productFound => productFound.title === product.title)
+    if (isInCart) {
       return true
     }
     else {
@@ -320,22 +319,20 @@ export class AutomotrizSectionsComponent implements OnInit {
 
 
 
-  
-  addToCart(product){
+
+  addToCart(product) {
     product.quantity = 1
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
-    this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
     this.cartDrawer.open()
   }
 
 
 
-  removeFromCart(product){
+  removeFromCart(product) {
     this.cartService.deleteById(product)
     this.checkCart(product)
     this.cartService.updateCount()
-    this.alert.notifySuccess('Producto eliminado del carrito', 800, 'top', 'center');
   }
 
 

@@ -9,6 +9,9 @@ import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 
+import { LoginService } from '../../services/login.service'
+
+
 @Component({
   selector: 'app-herramientas-section',
   templateUrl: './herramientas-section.component.html',
@@ -99,7 +102,8 @@ export class HerramientasSectionComponent implements OnInit {
     public router: Router,
     public cartService: CartService,
     public alert: AlertService,
-    public productService: ProductsService
+    public productService: ProductsService,
+     public loginService: LoginService
   ) { }
 
 
@@ -320,7 +324,7 @@ export class HerramientasSectionComponent implements OnInit {
 
 
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
+    let isInCart = this.loginService.selectedUser.cart.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }

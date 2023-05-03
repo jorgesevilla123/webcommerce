@@ -7,6 +7,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
+import { LoginService } from '../../services/login.service'
 
 @Component({
   selector: 'app-secadora-sections',
@@ -16,6 +17,19 @@ import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
 export class SecadoraSectionsComponent implements OnInit {
   @ViewChild(CartOverviewComponent) cartDrawer: CartOverviewComponent
   @Input() data: any
+
+
+  
+  constructor(
+    public route: ActivatedRoute,
+    public router: Router,
+    public cartService: CartService,
+    public alert: AlertService,
+    public productService: ProductsService,
+    public loginService: LoginService
+  ) { }
+
+
 
 
   products: any
@@ -73,7 +87,7 @@ export class SecadoraSectionsComponent implements OnInit {
  
   ]
 
-
+  
 
 
   sectionsToRender: any
@@ -82,7 +96,7 @@ export class SecadoraSectionsComponent implements OnInit {
   sortList = [
     'menor precio a mayor precio',
     'mayor precio a menor precio'
-  ]
+  ]  
 
 
   
@@ -90,9 +104,9 @@ export class SecadoraSectionsComponent implements OnInit {
   sections = [
     {
       section_name: 'Iluminacion', route: "/categories", query: 'iluminacion', all_button: 'Ver toda la iluminacion', cols: 4, rowHeight: '220px'
-    }
+    }  
 
-  ]
+  ]  
 
   routeData: any
   category: any
@@ -102,21 +116,12 @@ export class SecadoraSectionsComponent implements OnInit {
   pager: any
   pageName: any
   completed: boolean = false
-
-
-
-
-
-
-
-  constructor(
-    public route: ActivatedRoute,
-    public router: Router,
-    public cartService: CartService,
-    public alert: AlertService,
-    public productService: ProductsService
-  ) { }
-
+  
+  
+  
+  
+  
+  
 
 
 
@@ -342,7 +347,7 @@ export class SecadoraSectionsComponent implements OnInit {
   
 
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
+    let isInCart = this.loginService.selectedUser.cart.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }
@@ -359,7 +364,7 @@ export class SecadoraSectionsComponent implements OnInit {
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
     this.cartDrawer.open()
-    this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
+ 
   }
 
 
@@ -368,7 +373,7 @@ export class SecadoraSectionsComponent implements OnInit {
     this.cartService.deleteById(product)
     this.checkCart(product)
     this.cartService.updateCount()
-    this.alert.notifySuccess('Producto eliminado del carrito', 800, 'top', 'center');
+  
   }
 
 

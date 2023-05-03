@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, RequiredValidator} from '@angular/forms';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import { ProductsModalComponent } from '../products-modal/products-modal.component'
 import { LoginService } from '../../services/login.service'
+import { ShippingModalComponent } from '../../secondary-sections/shipping-modal/shipping-modal.component'
+import { ShippingService } from '../../services/shipping.service'
+
+
 
 interface Food {
   value: string;
@@ -28,16 +31,16 @@ export class BillingComponent implements OnInit {
   })
 
 
-
-  shippingAddressForm = new FormGroup({
-    avenida: new FormControl(''),
-    calle: new FormControl(''),
-    casa_apartamento: new FormControl(''),
-    info_adicional: new FormControl('')
-  })
   selectedValue: string;
   selectedCar: string;
   selectedState: String
+  selectedShipping: any
+  paymentProcessed:any = 'waitingCode'
+
+
+
+
+
 
   foods: Food[] = [
     {value: 'Zelle', viewValue: 'Zelle'},
@@ -58,12 +61,22 @@ export class BillingComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     public loginService: LoginService,
-    public dialog: MatDialog) {}
+    public dialog: MatDialog,
+    public shippingService: ShippingService
+    ) {}
 
  
 
+
   ngOnInit(): void {
   } 
+
+
+
+  selectShipping(radio, shipping){
+    radio.checked ? (radio.checked = false, this.selectedShipping = undefined) : (radio.checked = true, this.selectedShipping = shipping)
+    
+  }
 
 
 
@@ -74,7 +87,21 @@ export class BillingComponent implements OnInit {
 
 
   openDialog(){
-    this.dialog.open(ProductsModalComponent)
+    this.dialog.open(ShippingModalComponent)
+  }
+
+
+  validate(){
+    this.paymentProcessed = 'processing'
+    this.validated()
+  }
+
+
+
+  validated(){
+    setTimeout(() => {
+      this.paymentProcessed = 'processed'
+    }, 4000)
   }
 
 }

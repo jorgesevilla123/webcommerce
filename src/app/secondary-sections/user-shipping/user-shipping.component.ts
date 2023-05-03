@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ShippingModalComponent } from '../shipping-modal/shipping-modal.component'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog'
+import { LoginService } from '../../services/login.service'
+import { ShippingService } from '../../services/shipping.service'
 
 
 
@@ -14,7 +16,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 export class UserShippingComponent implements OnInit {
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public loginService: LoginService,
+    public shippingService: ShippingService
 
   ) { }
 
@@ -25,13 +29,22 @@ export class UserShippingComponent implements OnInit {
 
 
   addShipping(){
-    let dialogRef = this.dialog.open(ShippingModalComponent)
+    let dialogConfig = new MatDialogConfig()
+    dialogConfig.width = '25%'
+    let dialogRef = this.dialog.open(ShippingModalComponent, dialogConfig)
     dialogRef.afterClosed().subscribe(
       val => {
-        console.log('closed')
+        if(val.AddedShipping){
+
+          
+        }
       }
     )
 
   }
+
+  
+
+
 
 }

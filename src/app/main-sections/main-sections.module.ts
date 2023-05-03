@@ -14,8 +14,7 @@ import { RegistrationComponent } from './registration/registration.component'
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-
-
+import { NgbRatingModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap'
 
 
 
@@ -39,7 +38,9 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     ReactiveFormsModule,
     AppRoutingModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    NgbRatingModule,
+    NgbCarouselModule
   ],
   exports: [
    

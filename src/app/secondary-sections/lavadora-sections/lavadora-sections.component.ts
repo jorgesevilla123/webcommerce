@@ -7,6 +7,10 @@ import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
+import { LoginService } from '../../services/login.service'
+
+
+
 @Component({
   selector: 'app-lavadora-sections',
   templateUrl: './lavadora-sections.component.html',
@@ -93,7 +97,8 @@ export class LavadoraSectionsComponent implements OnInit{
     public router: Router,
     public cartService: CartService,
     public alert: AlertService,
-    public productService: ProductsService
+    public productService: ProductsService,
+ public loginService: LoginService
   ) { }
 
 
@@ -325,7 +330,7 @@ export class LavadoraSectionsComponent implements OnInit{
   
 
   checkCart(product){
-    let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
+    let isInCart = this.loginService.selectedUser.cart.some( productFound => productFound.title === product.title)
     if(isInCart){
       return true
     }
@@ -342,7 +347,7 @@ export class LavadoraSectionsComponent implements OnInit{
     this.cartService.addProductsToCart(product)
     this.cartService.updateCount();
     this.cartDrawer.open()
-    this.alert.notifySuccess('Producto agregado al carrito', 800, 'top', 'center')
+  
   }
 
 
@@ -351,7 +356,7 @@ export class LavadoraSectionsComponent implements OnInit{
     this.cartService.deleteById(product)
     this.checkCart(product)
     this.cartService.updateCount()
-    this.alert.notifySuccess('Producto eliminado del carrito', 800, 'top', 'center');
+  
   }
 
 

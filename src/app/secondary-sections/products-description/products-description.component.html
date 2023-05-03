@@ -1,71 +1,71 @@
+<app-cart-overview>
+
 
 
     <app-main-search-bar></app-main-search-bar>
 
 
+    <div class="container">
 
-    <mat-grid-list style="background-color: white;" cols="5" rowHeight="500px">
-        <mat-grid-tile  [colspan]="2">
-            <img [src]="data.imagePath" width="300px" height="300px" alt="">
+
+
+
+
+
+        <div class="grid">
+
+
+            <div class="card-3 product-container">
+
+                <div class="product-image">
+                    <img src="../../../assets/bombillo 15w.jpeg" width="400px" height="400px" alt="">
+                </div>
+
+                <div class="product-description">
+                    <h3>{{data.title}}</h3>
+
+
+                    <h3><b>Modelo: </b>{{data.modelo}}</h3>
+                    <h3><b>Detalles de producto: </b> </h3>
                 
-          
 
-            
-        </mat-grid-tile>
+                </div>
 
 
-        <mat-grid-tile style="background-color: white;" [colspan]="2">
-         
+               
 
-            <div style="margin-right: 40%;">
-   
+               </div>
 
-                <h3 style="font-weight: bold;">Descripcion del producto:</h3>
-                <h4>{{data.category_name}}</h4>
-                <h3 style="font-weight: bold;">Marca:</h3>
-                <h4>{{data.category_name}}</h4>
-                <h3 style="font-weight: bold;">Marca:</h3>
-                <h4>{{data.category_name}}</h4>
-                <h3 style="font-weight: bold;">Marca:</h3>
-                <h4>{{data.category_name}}</h4>
-                <h3 style="font-weight: bold;">Marca:</h3>
-                <h4>{{data.category_name}}</h4>
-          
-            </div>
-           
+
+
+               
+               <div class="card-3 produc-actions">
+                <h3 style="margin-top: 20px; margin-left: 20px;">Calificacion del producto</h3>
                 
-          
+
+                <div class="rating-container">
+                <ngb-rating style="margin-left: 20px;" [(rate)]="currentRate" [max]="5">
+                    <ng-template let-fill="fill" let-index="index">
+                        <i class="bi-star{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+                    </ng-template>
+                </ngb-rating>
+
+                <h2 style="margin-left: 20px; font-weight: bold;">{{currentRate | number: '1.1-1'}}</h2>
+
+                </div>
+
+                
+                <h4 style="margin-top: 20px; margin-left: 20px;">¿Alguna duda?</h4>
+                <button (click)="openChat()" style="width: 80%; margin-left: auto; margin-right: auto;" mat-raised-button>Escribenos! <i class="bi bi-chat-text"></i></button>
 
 
-        
-    </mat-grid-tile>
-
-        <!---------------------------------------------->
-
-
-        <mat-grid-tile [colspan]="1">
-            <mat-card style="width: 80%; height: 100%;">
-
-
-                <div mat-card-content></div>
-
-                <h4>Calificacion del producto</h4>
-                <mat-icon style="color: rgb(250, 209, 74);">star_rate</mat-icon>
-                <mat-icon style="color: rgb(250, 209, 74);">star_rate</mat-icon>
-                <mat-icon style="color: rgb(250, 209, 74);">star_rate</mat-icon>
-                <mat-icon style="color: rgb(250, 209, 74);">star_rate</mat-icon>
-                <mat-icon style="color: rgb(250, 209, 74);">star_rate_half</mat-icon>
-
-                <h4 style="margin-top: 20px;">¿Alguna duda?</h4>
-                <button style="width: 100%; margin-left: auto; margin-right: auto;" mat-raised-button>Escribenos! <mat-icon>chat</mat-icon></button>
-
-
-                <h1 style="font-weight: 700; margin-top: 20px; font-size: 30px;">{{price | currency: 'USD'}}</h1>
-
+                    <h1 style="font-weight: 700; margin-top: 20px; font-size: 30px; margin-left: 20px;">{{price | currency: 'USD'}}</h1>
        
+              
 
-                <mat-card-actions style="margin-top: 10%;">
-                    <mat-form-field appearance="fill">
+              
+    
+                    <!-- <mat-form-field appearance="fill" style="width: 90%; margin-left: auto; margin-right: auto;">
          
                         <mat-label>Cantidad</mat-label>
                         <mat-select [(value)]="selectedQuantity" (valueChange)="updateQuantity()">
@@ -73,30 +73,298 @@
                             <mat-option *ngFor="let option of quantities" [value]="option">{{option}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-             
+              -->
 
 
-                    <button style="width: 100%; height: 50px; margin-left: auto; margin-right: auto; margin-bottom: 10px; background-color: dodgerblue; color: white;" mat-raised-button>Comprar <mat-icon>shopping_bag</mat-icon></button>
+              
+                                  <div *ngIf="checkCart(data); then isInCart else notInCart"></div>
+              
+                                  <ng-template #isInCart>
+                                          <button mat-button style="width: 90%; height: 50px; margin-left: auto; margin-right: auto; background-color: red; color: white; margin-bottom: 20px;" (click)="removeFromCart()">Eliminar del carrito<mat-icon>remove_shopping_cart</mat-icon></button>
+                                  </ng-template>
+              
+                                
+              
+                                  <ng-template #notInCart>
+                                      <button style="width: 90%; height: 50px; margin-left: auto; margin-right: auto; margin-bottom: 20px;" mat-raised-button (click)="addToCart()">Agregar al carrito <mat-icon>add_shopping_cart</mat-icon></button>
+                                  </ng-template>
+                                
+                    <button routerLink="/cart" style="width: 90%; height: 50px; margin-left: auto; margin-right: auto; margin-bottom: 10px; background-color: dodgerblue; color: white;" mat-raised-button>Verificar y comprar <mat-icon>shopping_bag</mat-icon></button>
 
 
-
-                    <div *ngIf="inCart; else notInCart">
-                       <button disabled mat-button  style="width: 100%; margin-left: auto; margin-right: auto; color: black;">Agregado al carrito</button>
-                       <button mat-button style="width: 100%; margin-left: auto; margin-right: auto; background-color: red; color: white;" (click)="removeFromCart()">Eliminar del carrito<mat-icon>remove_shopping_cart</mat-icon></button>
-                    </div>
-
-                    <ng-template #notInCart>
-                        <button style="width: 100%; margin-left: auto; margin-right: auto;" mat-raised-button (click)="addToCart()">Agregar al carrito <mat-icon>add_shopping_cart</mat-icon></button>
-                    </ng-template>
                   
+               </div>
 
-                </mat-card-actions>
+            </div>   
 
 
-            </mat-card>
-        </mat-grid-tile>
 
-    </mat-grid-list>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="also-searched">
+
+            <h1 style="margin-top: 20px; margin-left: 20px;">Tambien se busco</h1>
+
+
+ <ngb-carousel>
+
+    <ng-template ngbSlide>
+        <div style="display: flex; margin-left: 30px; margin-right: 30px; justify-content: center;">
+            
+            
+      
+            <div class="card-2">
+                <div class="image">
+                    <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+            <div class="card-2">
+                <div class="image">
+                    <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+            <div class="card-2">
+                <div class="image">
+                        <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+            <div class="card-2">
+                <div class="image">
+                            <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+             <div class="card-2">
+                <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+          
+
+
+
+        </div>
+
+
+
+    </ng-template>
+    <ng-template ngbSlide>
+        <div style="display: flex; margin-left: 30px; margin-right: 30px; justify-content: center;">
+            
+            
+            
+            <div class="card-2">
+                <div class="image">
+                    <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+            <div class="card-2">
+                <div class="image">
+                    <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+            <div class="card-2">
+                <div class="image">
+                        <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+            <div class="card-2">
+                <div class="image">
+                            <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+
+
+             <div class="card-2">
+                <div class="image">
+                                <img class="recommended-products-img" src="../../../assets/bombillo 15w.jpeg">
+                </div>
+        
+                <div class="heading"> Bombillo de 15W
+                </div>
+                <div class="author">{{200 | currency: 'USD'}}</div>
+            </div>
+
+          
+
+
+
+        </div>
+
+    </ng-template>
+</ngb-carousel>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div *ngIf="openMessage">
+    
+<div class="box">
+    <nav class="navbar bg-body-tertiary bg-dark">
+        <div class="container-fluid">
+          <div class="navbar-brand">
+            <i class="bi bi-person-circle"></i>
+            <h3>Ayudante en linea</h3>
+
+
+                <i (click)="closeChat()" style="margin-left: auto" class="close bi bi-x-circle-fill"></i>
+           
+            
+
+          </div>
+        </div>
+      </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div (scroll)="scrolled($event)" class="chat-section" id="chat-container" #scrollFrame>
+
+
+
+        <div class="client">
+            <h3 class="message-2">Text</h3>
+        </div>
+        
+        <div #message *ngFor="let message of websocket.chat" [class]="message.payload.author === loginService.selectedUser[0].email ? 'server' : 'client'">
+        
+
+        <div *ngIf="message.payload.author === loginService.selectedUser[0].email then clientMessage else serverMessage"></div>
+        <ng-template #clientMessage>
+            <h4 class="message-1">{{message.payload.message}}</h4>
+            <small style="margin: 20px">tu</small>
+        </ng-template>
+
+        <ng-template #serverMessage>
+            <h4 class="message-2">{{message.payload.message}}</h4>
+            <small style="margin: 20px">Servidor</small>
+        </ng-template>
+   
+        </div>
+
+       
+     
+
+    </div>
+
+
+
+
+
+<div style="background-color: #00000029; height: 100px;">
+    <form (submit)="sendMessage(input.value)" #chatForm>
+
+        <div style="display: flex; width: 95%; margin-left: auto; margin-right: auto;" class="input-group">
+            <input style="margin-top: 10px;" (submit)="sendMessage(input.value)"  #input type="text" class="form-control" placeholder="Escribe algun mensaje" aria-label="Input group example" aria-describedby="btnGroupAddon"> 
+            <button style="margin-top: 10px;" type="submit" class="btn btn-primary"><i style="color: white;" class="bi bi-send"></i></button>
+        </div>
+
+   
+        
+  
+    </form>
+
+
+</div>
+ 
+</div>
+
+
+
+
+</div>
+
+
+
+
+</app-cart-overview>
+
+
+
 
 
 

@@ -34,6 +34,7 @@ import { CartService } from '../../services/cart.service'
 import { AlertService } from '../../shared/alert.service'
 import { ProductsService } from '../../services/products.service'
 import { CartOverviewComponent } from '../cart-overview/cart-overview.component'
+import { LoginService } from '../../services/login.service'
 
 
 
@@ -68,7 +69,8 @@ export class LightningSectionComponent implements OnInit {
     public router: Router,
     public cartService: CartService,
     public alert: AlertService,
-    public productService: ProductsService
+    public productService: ProductsService,
+    public loginService: LoginService
 
   ) { }
 
@@ -239,9 +241,8 @@ export class LightningSectionComponent implements OnInit {
 
 
   getDescription(data) {
-    let route_data = JSON.stringify(data)
-    let route = `/${data.route}/${data.category_name}?d=${route_data}`
-    this.router.navigateByUrl(route)
+    let parsedProduct = JSON.stringify(data)
+    this.router.navigate([`/product-details/${data._id}`], {queryParams: {product: parsedProduct}})
 
   }
 
@@ -404,12 +405,24 @@ export class LightningSectionComponent implements OnInit {
 
 
   checkCart(product) {
-    let isInCart = this.cartService.cartProducts.some(productFound => productFound.title === product.title)
+    console.log(this.loginService.selectedUser)
+    if(this.loginService.selectedUser.length === 0){
+      let isInCart = this.cartService.cartProducts.some( productFound => productFound.title === product.title)
+      if(isInCart){
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    else{
+      let isInCart = this.loginService.selectedUser[0].cart.some(productFound => productFound.title === product.title)
     if (isInCart) {
       return true
     }
     else {
       return false
+    }
     }
   }
 
@@ -460,7 +473,11 @@ export class LightningSectionComponent implements OnInit {
 
   addToCart(product) {
     product.quantity = 1
-    this.cartService.addProductsToCart(product)
+    this.cartService.addProductsToCart(product).subscribe(
+      val => {
+        console.log(val)
+      }
+    )
     this.cartService.updateCount();
     this.cartDrawer.open()
   }

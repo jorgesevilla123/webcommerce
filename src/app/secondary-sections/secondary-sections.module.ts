@@ -20,7 +20,7 @@ import { UsersCartComponent } from './users-cart/users-cart.component';
 import { UserShippingComponent } from './user-shipping/user-shipping.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { ShippingModalComponent } from './shipping-modal/shipping-modal.component';
-
+import { NgbRatingModule,  NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   declarations: [
@@ -47,7 +47,9 @@ import { ShippingModalComponent } from './shipping-modal/shipping-modal.componen
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    MainSectionsModule
+    MainSectionsModule,
+    NgbRatingModule,
+     NgbCarouselModule
   ]
 })
 export class SecondarySectionsModule { }

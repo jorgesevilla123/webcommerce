@@ -12,13 +12,15 @@ import { HomeComponent } from './main-sections/home/home.component';
 import { MainSectionsModule } from './main-sections/main-sections.module';
 import { SecondarySectionsModule } from './secondary-sections/secondary-sections.module';
 import { MainToolbarComponent } from './main-sections/main-toolbar/main-toolbar.component';
-
+import { UpdateModalComponent } from './shared/update-modal/update-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    MainToolbarComponent
+    MainToolbarComponent,
+    UpdateModalComponent
 
   ],
   imports: [
@@ -30,7 +32,8 @@ import { MainToolbarComponent } from './main-sections/main-toolbar/main-toolbar.
     FormsModule,
     ReactiveFormsModule,
     MainSectionsModule,
-    SecondarySectionsModule
+    SecondarySectionsModule,
+    NgbModule
   ],
   exports: [
     MainToolbarComponent

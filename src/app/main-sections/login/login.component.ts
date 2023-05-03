@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { LoginService } from '../../services/login.service'
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,10 @@ export class LoginComponent implements OnInit {
 
 
 
-  constructor() { }
+  constructor(
+    public loginService: LoginService,
+    private cartService: CartService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -31,6 +36,29 @@ export class LoginComponent implements OnInit {
     let secret = this.loginForm.get('password').value
     console.log(email)
     console.log(secret)
+
+    let user = this.loginService.users.find(
+      val => val.email === email
+      
+    )
+
+    let passwordMatch = user.password === secret
+    console.log(passwordMatch)
+
+    if(passwordMatch){
+      this.loginService.setLogin(user) 
+      this.cartService.updateCount()
+
+    }
+    else {
+      this.loginService.setLogout()
+
+    }
+
+
+
+
+
   }
 
 }

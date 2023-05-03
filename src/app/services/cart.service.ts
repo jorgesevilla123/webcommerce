@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
+import { LoginService } from '../services/login.service'
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,61 +13,86 @@ export class CartService {
   cartProducts: any = []
   count
   total = 0
+  uri = 'http://localhost:4300/api/sessions'
 
-  constructor() { }
+
+  constructor(
+    public loginService: LoginService,
+    private http: HttpClient
+  ) { }
 
 
-  getCartProducts(): Observable<any> {
-    return from([this.cartProducts])
+  getCartProducts(): any {
+
+    return this.loginService.selectedUser.length === 0 ? from([this.cartProducts]) :  from([this.loginService.selectedUser[0].cart])
+
   }
 
-
+  
 
 
 
   addProductsToCart(product) {
-    this.cartProducts.push(product)
+    product.selected = true 
+    if(this.loginService.selectedUser.length === 0){
+      this.cartProducts.push(product)
+      return from([{notUser: false}])
+      
+
+    }
+    else {
+      return this.http.post(`${this.uri}/add-to-cart`, 'nigga what')
+    }
+    // this.loginService.selectedUser.length === 0 ? this.cartProducts.push(product) : this.loginService.selectedUser[0].cart.push(product) 
 
   }
 
 
 
   deleteProductFromCart(product) {
-    let index = this.cartProducts.indexOf(product)
+    let index = this.loginService.selectedUser[0].cart.indexOf(product)
 
-    this.cartProducts.splice(index, 1)
+    this.loginService.selectedUser[0].cart.splice(index, 1)
 
   }
 
 
-  deleteById(product) {
-    let index = this.cartProducts.findIndex(val => val.title === product.title)
+  
 
-    this.cartProducts.splice(index, 1)
+
+  deleteById(product) {
+    let index = this.loginService.selectedUser[0].cart.findIndex(val => val.title === product.title)
+
+    this.loginService.selectedUser[0].cart.splice(index, 1)
     return from([{ inCart: false }])
 
   }
 
 
   updateCount() {
-    this.count = this.cartProducts.length
+    this.loginService.selectedUser.length === 0 ? this.count = this.cartProducts.length : this.count = this.loginService.selectedUser[0].cart.length
 
   }
 
 
 
-  updateQuantity(product, quantity) {
-    let index = this.cartProducts.findIndex(val => val.title === product.title)
-    this.cartProducts[index].quantity = quantity
-
+  updateQuantity(product, quantity){
+    console.log(this.loginService.selectedUser[0])
+    let index = this.loginService.selectedUser[0].cart.findIndex(val => val.title === product.title)
+    this.loginService.selectedUser[0].cart[index].quantity = quantity
   }
 
 
 
   calculateTotal() {
+    console.log(this.cartProducts)
     this.total = 0
 
-    this.cartProducts.forEach(
+    if(this.loginService.selectedUser.length === 0){
+
+      let productsSelected = this.cartProducts.filter( product => product.selected)
+
+    productsSelected.forEach(
       product => {
 
         this.total += Number(product.quantity * product.precio)
@@ -73,8 +100,28 @@ export class CartService {
 
       }
     )
-
     return this.total
+
+
+    }
+    else {
+      let productsSelected = this.loginService.selectedUser[0].cart.filter( product => product.selected)
+
+    productsSelected.forEach(
+      product => {
+
+        this.total += Number(product.quantity * product.precio)
+
+
+      }
+    )
+    return this.total
+
+    }
+
+    
+
+
   }
 
 
@@ -84,7 +131,9 @@ export class CartService {
   IncreaseTotal() {
     this.total = 0
 
-    this.cartProducts.forEach(
+    let productsSelected = this.loginService.selectedUser[0].cart.filter( product => product.selected)
+
+    this.loginService.selectedUser[0].cart.forEach(
       product => {
 
         this.total += Number(product.quantity * product.precio)
@@ -101,8 +150,9 @@ export class CartService {
 
   decreaseTotal() {
     this.total = 0
+    let productsSelected = this.loginService.selectedUser[0].cart.filter( product => product.selected)
 
-    this.cartProducts.forEach(
+    this.loginService.selectedUser[0].cart.forEach(
       product => {
 
         this.total -= (product.quantity * product.precio)
