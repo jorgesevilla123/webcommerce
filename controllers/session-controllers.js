@@ -1,8 +1,12 @@
-const { client } = require('../server')
+const { createClient } = require('redis')
+
+let redisClient = createClient()
 
 
 
-
+redisClient.connect().then( () => {
+    console.log('Client for handling sessions operations connected')
+}).catch( err => {console.log(err)})
 
 
 let session;
@@ -10,6 +14,17 @@ let session;
 
 
 function getUsers(req, res){
+
+    redisClient.set('key', 'value').then(
+        val => {
+            console.log(val)
+        }
+
+    ).catch(
+        err => {
+            console.log('Error creating user', err)
+        }
+    )
     console.log('getting users')
     res.send('Hey nigga')
 }
@@ -21,6 +36,7 @@ function getUsers(req, res){
 
 
 function createUser(req, res){
+
   
     let {name, email, password, repeatPassword, contact_phone } = req.body
     
@@ -37,6 +53,20 @@ function createUser(req, res){
     let passwordsMatch = password === repeatPassword
 
     if(passwordsMatch){
+
+        redisClient.set('userid', req.session.id).then(
+            val => {
+                console.log('Id saved')
+            }
+        ).catch(
+            err => {
+                console.log('Error saving id ', err)
+            }
+        )
+
+        
+
+      
         
     
     session = req.session
@@ -74,7 +104,23 @@ function loginUser(){
 
 
 function sessionChecker(req, res, next){
-    console.log(session.id)
+    redisClient.get('userid').then(
+        products => {
+            if(products){
+                console.log('user found')
+
+            }
+            else {
+                console.log('Products not found')
+            }
+        }
+
+    ).catch(
+        err => {
+            res.json({message: 'not found'})
+            console.log('not found')
+        }
+    )
     // console.log(`Session Checker: ${req.session.id}`.green);
     // console.log(req.session);
     // if (req.session.profile) {

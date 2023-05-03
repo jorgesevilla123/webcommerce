@@ -12,13 +12,21 @@ const { createClient } = require('redis')
 const { WebSocketServer, WebSocket } = require('ws')
 
 
-export const client = createClient()
+const redisClient = createClient()
 
-client.on('error', err => console.log('Redis Client Error', err));
+redisClient.on('error', err => console.log('Redis Client Error', err));
 
-client.connect( () => {
-  console.log('Client connected')  
-})
+
+
+
+redisClient.connect().then( () => {
+    console.log('connected to server')
+}).catch( err => {console.log(err)})
+
+
+
+
+
 
 let redisStore = new RedisStore({
     client: redisClient,
@@ -159,5 +167,10 @@ function runServer(){
 }
 
 
+
 runServer()
+
+
+module.exports = redisClient
+
 
