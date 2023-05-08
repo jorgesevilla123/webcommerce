@@ -168,7 +168,7 @@ function removeFromCart(req, res){
 
 function updateQuantities(req, res){
     let body = req.body
-    console.log('line 171 ', body.ids)
+    console.log('line 171 ', body.ids[0])
 
     if(body.ids.length > 1){
         ids.forEach(
