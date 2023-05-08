@@ -184,7 +184,7 @@ function updateQuantities(req, res){
                 let parsedProfile = JSON.parse(profile)
                 console.log('185 ', parsedProfile)
                 let index = parsedProfile.cart.findIndex(
-                    product => product.id === body.ids
+                    product => product.id === body.ids[0]
 
                 )
                 console.log(index)
